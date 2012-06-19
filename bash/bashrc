@@ -36,10 +36,12 @@ YELLOW=";33m"
 BLUE=";34m"
 MAGENTA=";35m"
 
+# Based on:
 # http://www.opinionatedprogrammer.com/2011/01/colorful-bash-prompt-reflecting-git-status/
 function _git_prompt() {
     local git_status="`git status -unormal 2>&1`"
     if ! [[ "$git_status" =~ Not\ a\ git\ repo ]]; then
+        # Determine status of revisions
         if [[ "$git_status" =~ nothing\ to\ commit ]]; then
             local ansi=$GREEN
         elif [[ "$git_status" =~ nothing\ added\ to\ commit\ but\ untracked\ files\ present ]]; then
@@ -47,6 +49,8 @@ function _git_prompt() {
         else
             local ansi=$MAGENTA
         fi
+
+        # Determine branch
         if [[ "$git_status" =~ On\ branch\ ([^[:space:]]+) ]]; then
             branch=${BASH_REMATCH[1]}
         else
@@ -54,7 +58,25 @@ function _git_prompt() {
             branch="(`git describe --all --contains --abbrev=4 HEAD 2> /dev/null ||
                 echo HEAD`)"
         fi
-        echo -n "\[$ESC[$DULL$ansi\]($branch)\[$ESC[00m\] "
+
+        # Determine remote URL and set .gitconfig username and email.
+        # Alternatively, we could wrap cd like RVM does, but this works
+        # for now.
+        local git_remote="`git remote -v 2>&1`"
+        if [[ "$git_remote" =~ github\.com  ]]; then
+            local gitconfig="modocache@"
+            export GIT_AUTHOR_NAME="modocache"
+            export GIT_AUTHOR_EMAIL="modocache@gmail.com"
+        else
+            # Be sure to set these variables somewhere not in source control.
+            local gitconfig="work@"
+            export GIT_AUTHOR_NAME="$WORK_GIT_AUTHOR_NAME"
+            export GIT_AUTHOR_EMAIL="$WORK_GIT_AUTHOR_EMAIL"
+        fi
+        export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
+        export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
+
+        echo -n "\[$ESC[$DULL$ansi\]($gitconfig$branch)\[$ESC[00m\] "
     fi
 }
 

@@ -18,6 +18,7 @@ namespace :configure do
     paths = [
       [File.join(HOME_DIR, '.bash_profile'), File.join(bash_dir, 'bash_profile')],
       [File.join(HOME_DIR, '.bashrc'), File.join(bash_dir, 'bashrc')],
+      [File.join(HOME_DIR, '.bash_env_vars'), File.join(bash_dir, 'bash_env_vars.template')],
     ]
 
     paths.each { |p| create_symlink(*p) }
@@ -33,6 +34,11 @@ namespace :configure do
     ]
 
     paths.each { |p| create_symlink(*p) }
+  end
+
+  desc 'configure git settings'
+  task :git do
+    
   end
 
 end
