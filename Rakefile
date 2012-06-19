@@ -41,8 +41,10 @@ end
 desc "install everything"
 task :install => [
   'install:homebrew',
+  'install:homebrew:packages',
   'install:python',
   'install:ruby',
+  'install:node',
   'install:vim',
 ]
 
@@ -50,6 +52,22 @@ namespace :install do
   desc 'install homebrew'
   task :homebrew do
     system %Q{ /usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)" }
+  end
+
+  namespace :homebrew do
+    desc 'install useful homebrew packages'
+    task :packages do
+      packages = [
+        'appledoc',
+        'rlwrap',
+        'postgresql',
+        'mobile-shell',
+        'mongodb',
+        'valgrind',
+        'wget',
+      ]
+      packages.each { |p| system("brew install #{p}") }
+    end
   end
 
   
@@ -93,7 +111,7 @@ namespace :install do
 
   namespace :ruby do
     desc 'install RVM'
-    task :rvm => ['install:bash'] do
+    task :rvm => ['configure:bash'] do
       system('curl -L https://get.rvm.io | bash -s stable')
       system('. ~/bash_profile')
     end
@@ -103,6 +121,14 @@ namespace :install do
       system('rvm install 1.9.3')
       system('rvm use 1.9.3 --default')
     end
+  end
+
+  desc 'install nvm and Node.js v0.6.19'
+  task :node => ['configure:bash'] do
+    system('git clone git://github.com/creationix/nvm.git ~/.nvm')
+    system('. ~/.bash_profile')
+    system('nvm install v0.6.19')
+    system('nvm alias default v0.6.19')
   end
 
   desc 'build and install Vim with Python and Ruby support'

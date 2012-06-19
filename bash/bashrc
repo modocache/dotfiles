@@ -83,12 +83,6 @@ export PATH="/usr/local/lib:${PATH}"
 source ~/.git-completion.bash
 
 
-############
-# HOMEBREW #
-############
-
-
-
 ##############
 # POSTGRESQL #
 ##############
