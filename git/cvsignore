@@ -1,0 +1,11 @@
+# OS X
+.DS_Store
+
+# Vim
+*.swp
+tags
+tags-te
+
+# Python
+*.pyc
+*.pyo

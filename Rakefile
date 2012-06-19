@@ -7,7 +7,12 @@ desc 'run all tasks'
 task :all => [ 'configure', 'install' ]
 
 desc "symlink all dotfiles into user's home directory"
-task :configure => [ 'configure:bash', 'configure:vim' ]
+task :configure => [
+  'configure:bash',
+  'configure:vim',
+  'configure:git',
+  'configure:osx'
+]
 
 namespace :configure do
 
@@ -18,7 +23,7 @@ namespace :configure do
     paths = [
       [File.join(HOME_DIR, '.bash_profile'), File.join(bash_dir, 'bash_profile')],
       [File.join(HOME_DIR, '.bashrc'), File.join(bash_dir, 'bashrc')],
-      [File.join(HOME_DIR, '.bash_env_vars'), File.join(bash_dir, 'bash_env_vars.template')],
+      [File.join(HOME_DIR, '.bash_env_vars'), File.join(bash_dir, 'bash_env_vars')],
     ]
 
     paths.each { |p| create_symlink(*p) }
@@ -38,7 +43,38 @@ namespace :configure do
 
   desc 'configure git settings'
   task :git do
-    
+    git_dir = File.join(File.dirname(__FILE__), 'git')
+
+    paths = [
+      [File.join(HOME_DIR, '.gitconfig'), File.join(git_dir, 'gitconfig')],
+      [File.join(HOME_DIR, '.cvsignore'), File.join(git_dir, 'cvsignore')],
+      [File.join(HOME_DIR, '.gitmessage.txt'), File.join(git_dir, 'gitmessage.txt')],
+    ]
+
+    paths.each { |p| create_symlink(*p) }
+
+    puts 'Enter Github API token, or simply press enter to skip this step:'
+    api_token = $stdin.gets.chomp
+    system("git config --global github.token #{api_token}") unless api_token.empty?
+  end
+
+  desc 'configure OS X settings'
+  task :osx do
+    commands = [
+      # Not typing any accent marks anytime soon
+      'defaults write -g ApplePressAndHoldEnabled -bool NO',
+      # Hidden applications appear translucent in Dock
+      'defaults write com.apple.Dock showhidden -bool YES',
+      # Prompt to save file always shows detailed view
+      'defaults write -g NSNavPanelExpandedStateForSaveMode -bool YES',
+      # Show hidden files in Finder
+      'defaults write com.apple.finder AppleShowAllFiles -bool YES',
+      # Show full path to current Folder in Finder
+      'defaults write com.apple.finder _FXShowPosixPathInTitle -bool YES',
+      # Change Time Machine backup interval (in seconds)
+      # 'sudo defaults write /System/Library/LaunchDaemons/com.apple.backupd-auto StartInterval -int 7200',
+    ]
+    commands.each { |c| system(c) }
   end
 
 end
@@ -76,7 +112,6 @@ namespace :install do
     end
   end
 
-  
   desc 'install Python'
   task :python => ['install:python:packages']
 
@@ -110,7 +145,6 @@ namespace :install do
       create_symlink(from, to, {:is_dir => true})
     end
   end
-
 
   desc 'install Ruby'
   task :ruby => ['install:ruby:install']
