@@ -1,0 +1,78 @@
+[submodule "vim/vendor/vim-pathogen"]
+	path = vim/vendor/vim-pathogen
+	url = https://github.com/tpope/vim-pathogen.git
+[submodule "vim/bundle/vim-fugitive"]
+	path = vim/bundle/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/bundle/tabular"]
+	path = vim/bundle/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "vim/bundle/nerdtree"]
+	path = vim/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vim/bundle/pythoncomplete"]
+	path = vim/bundle/pythoncomplete
+	url = https://github.com/vim-scripts/pythoncomplete.git
+[submodule "vim/bundle/snipmate"]
+	path = vim/bundle/snipmate
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "vim/bundle/zencoding-vim"]
+	path = vim/bundle/zencoding-vim
+	url = https://github.com/mattn/zencoding-vim.git
+[submodule "vim/bundle/supertab"]
+	path = vim/bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "vim/bundle/Command-T"]
+	path = vim/bundle/Command-T
+	url = https://github.com/wincent/Command-T.git
+[submodule "vim/bundle/pyflakes-pathogen"]
+	path = vim/bundle/pyflakes-pathogen
+	url = https://github.com/mitechie/pyflakes-pathogen.git
+[submodule "vim/bundle/ack.vim"]
+	path = vim/bundle/ack.vim
+	url = https://github.com/mileszs/ack.vim.git
+[submodule "vim/bundle/gundo.vim"]
+	path = vim/bundle/gundo.vim
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "vim/bundle/pydoc.vim"]
+	path = vim/bundle/pydoc.vim
+	url = https://github.com/fs111/pydoc.vim.git
+[submodule "vim/bundle/pep8"]
+	path = vim/bundle/pep8
+	url = https://github.com/vim-scripts/pep8.git
+[submodule "vim/bundle/pytest.vim"]
+	path = vim/bundle/pytest.vim
+	url = https://github.com/alfredodeza/pytest.vim.git
+[submodule "vim/bundle/rope-vim"]
+	path = vim/bundle/rope-vim
+	url = https://github.com/klen/rope-vim
+[submodule "vim/bundle/vim-wombat"]
+	path = vim/bundle/vim-wombat
+	url = https://github.com/cschlueter/vim-wombat.git
+[submodule "vim/bundle/Solarized"]
+	path = vim/bundle/Solarized
+	url = https://github.com/vim-scripts/Solarized.git
+[submodule "vim/bundle/Conque-Shell"]
+	path = vim/bundle/Conque-Shell
+	url = https://github.com/vim-scripts/Conque-Shell.git
+[submodule "vim/bundle/vim-less"]
+	path = vim/bundle/vim-less
+	url = https://github.com/groenewege/vim-less.git
+[submodule "vim/bundle/c.vim"]
+	path = vim/bundle/c.vim
+	url = https://github.com/vim-scripts/c.vim.git
+[submodule "vim/bundle/cocoa.vim"]
+	path = vim/bundle/cocoa.vim
+	url = https://github.com/msanders/cocoa.vim.git
+[submodule "vim/bundle/vim-coffee-script"]
+	path = vim/bundle/vim-coffee-script
+	url = https://github.com/vim-scripts/vim-coffee-script.git
+[submodule "vim/bundle/valgrind.vim"]
+	path = vim/bundle/valgrind.vim
+	url = https://github.com/vim-scripts/valgrind.vim.git
+[submodule "vim/bundle/molokai"]
+	path = vim/bundle/molokai
+	url = git://github.com/vim-scripts/molokai.git
+[submodule "vim/bundle/AfterColors.vim"]
+	path = vim/bundle/AfterColors.vim
+	url = https://github.com/vim-scripts/AfterColors.vim.git

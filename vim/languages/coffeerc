@@ -1,0 +1,5 @@
+set tw=80 ts=2 sts=2 sw=2 expandtab
+
+set colorcolumn=80
+
+" vim:ft=vim
