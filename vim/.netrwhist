@@ -1,7 +1,0 @@
-let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =5
-let g:netrw_dirhist_1='/Users/bgesiak/Github/github/modocache/thedrawinggame/thedrawinggame/accounts/views'
-let g:netrw_dirhist_2='/Users/bgesiak'
-let g:netrw_dirhist_3='/Users/bgesiak/.ipython'
-let g:netrw_dirhist_4='/Users/bgesiak'
-let g:netrw_dirhist_5='/Users/bgesiak/Library/LaunchAgents'
