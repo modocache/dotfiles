@@ -76,15 +76,13 @@ function _git_prompt() {
         export GIT_COMMITTER_NAME="$GIT_AUTHOR_NAME"
         export GIT_COMMITTER_EMAIL="$GIT_AUTHOR_EMAIL"
 
-        echo -n "\[$ESC[$DULL$ansi\]($gitconfig$branch)\[$ESC[00m\] "
+        local prompt="\[$ESC[$DULL$ansi\]($gitconfig$branch)\[$ESC[00m\] "
     fi
+
+    PS1="${home}\[$ESC[$DULL$GREEN\]\u@\h\[$ESC[$DULL$BLUE\] \w $prompt\[$ESC[$DULL$BLUE\]⚡\[$ESC[00m\] "
 }
 
-function _prompt_command() {
-    PS1="${home}\[$ESC[$DULL$GREEN\]\u@\h\[$ESC[$DULL$BLUE\] \w `_git_prompt`\[$ESC[$DULL$BLUE\]⚡\[$ESC[00m\] "
-}
-
-PROMPT_COMMAND=_prompt_command
+PROMPT_COMMAND=_git_prompt
 
 
 ########
