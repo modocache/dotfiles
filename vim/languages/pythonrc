@@ -4,6 +4,11 @@
 " Wrapping and tabs.
 set tw=78 ts=4 sw=4 sta et sts=4 ai
 
+" Workaround for Python package watchdog + Vim
+" https://github.com/gorakhargosh/watchdog/issues/56
+set noswapfile
+set nowritebackup
+
 " More syntax highlighting.
 let python_highlight_all = 1
 
