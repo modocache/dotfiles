@@ -79,7 +79,7 @@ function _git_prompt() {
         local prompt="\[$ESC[$DULL$ansi\]($gitconfig$branch)\[$ESC[00m\] "
     fi
 
-    PS1="${home}\[$ESC[$DULL$GREEN\]\u@\h\[$ESC[$DULL$BLUE\] \w $prompt\[$ESC[$DULL$BLUE\]⚡\[$ESC[00m\] "
+    PS1="${home}\[$ESC[$DULL$GREEN\]\u@\h\[$ESC[$DULL$BLUE\] \w $prompt\[$ESC[$DULL$BLUE\]"'(´･ω ･\`)'"\[$ESC[00m\] "
 }
 
 PROMPT_COMMAND=_git_prompt
@@ -213,3 +213,5 @@ xterm*|rxvt*)
 *)
     ;;
 esac
+
+PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

@@ -15,15 +15,14 @@ task :configure => [
 ]
 
 namespace :configure do
-
   desc "symlink bash dotfiles into user's home directory"
   task :bash do
     bash_dir = File.join(File.dirname(__FILE__), 'bash')
 
     paths = [
-      [File.join(HOME_DIR, '.bash_profile'), File.join(bash_dir, 'bash_profile')],
-      [File.join(HOME_DIR, '.bashrc'), File.join(bash_dir, 'bashrc')],
-      [File.join(HOME_DIR, '.bash_env_vars'), File.join(bash_dir, 'bash_env_vars')],
+      [File.join(bash_dir, 'bash_profile'), File.join(HOME_DIR, '.bash_profile')],
+      [File.join(bash_dir, 'bashrc'), File.join(HOME_DIR, '.bashrc')],
+      [File.join(bash_dir, 'bash_env_vars'), File.join(HOME_DIR, '.bash_env_vars')],
     ]
 
     paths.each { |p| create_symlink(*p) }
@@ -93,7 +92,7 @@ task :install => [
 namespace :install do
   desc 'install homebrew'
   task :homebrew do
-    system %Q{ /usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)" }
+    confirm_and_run(%Q{ /usr/bin/ruby -e "$(/usr/bin/curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)" })
   end
 
   namespace :homebrew do
@@ -103,12 +102,11 @@ namespace :install do
         'appledoc',
         'rlwrap',
         'postgresql',
-        'mobile-shell',
         'mongodb',
         'valgrind',
         'wget',
       ]
-      packages.each { |p| system("brew install #{p}") }
+      packages.each { |p| confirm_and_run("brew install #{p}") }
     end
   end
 
@@ -118,26 +116,26 @@ namespace :install do
   namespace :python do
     desc 'install Python prerequisites'
     task :prerequisites => ['install:homebrew'] do
-      system('brew install readline sqlite gdbm')
+      confirm_and_run('brew install readline sqlite gdbm')
     end
 
     desc 'install a universal build of latest Python 2.* via homebrew'
     task :install => ['install:python:prerequisites'] do
-      system('brew install python --framework --universal')
+      confirm_and_run('brew install python --framework --universal')
       path = '/System/Library/Frameworks/Python.framework/Versions/Current'
 
       puts 'Need to use sudo in order to change symlink to default Python version...'
-      system("sudo rm #{path}")
-      system("sudo ln -s #{path} /usr/local/Cellar/python/2.7.2/Frameworks/Python.framework/Versions/Current")
+      confirm_and_run("sudo rm #{path}")
+      confirm_and_run("sudo ln -s #{path} /usr/local/Cellar/python/2.7.2/Frameworks/Python.framework/Versions/Current")
       
       # Install pip package manager.
-      system('easy_install pip')
+      confirm_and_run('easy_install pip')
     end
 
     desc 'install useful Python packages'
     task :packages => ['install:python:install'] do
-      system('brew install pkg-config')
-      system('pip install virtualenv virtualenvwrapper ipython')
+      confirm_and_run('brew install pkg-config')
+      confirm_and_run('pip install virtualenv virtualenvwrapper ipython')
       system('. /usr/local/share/python/virtualenvwrapper.sh')
 
       from = File.join(HOME_DIR, 'ipython', 'profile_default', 'startup')
@@ -152,52 +150,76 @@ namespace :install do
   namespace :ruby do
     desc 'install RVM'
     task :rvm => ['configure:bash'] do
-      system('curl -L https://get.rvm.io | bash -s stable')
+      confirm_and_run('curl -L https://get.rvm.io | bash -s stable')
       system('. ~/bash_profile')
     end
 
     desc 'install latest stable Ruby (1.9.3) and alias to default'
     task :install => ['install:ruby:rvm'] do
-      system('rvm install 1.9.3')
-      system('rvm use 1.9.3 --default')
+      confirm_and_run('rvm install 1.9.3')
+      confirm_and_run('rvm use 1.9.3 --default')
     end
   end
 
   desc 'install nvm and Node.js v0.6.19'
   task :node => ['configure:bash'] do
-    system('git clone git://github.com/creationix/nvm.git ~/.nvm')
-    system('. ~/.bash_profile')
-    system('nvm install v0.6.19')
-    system('nvm alias default v0.6.19')
+    confirm_and_run('git clone git://github.com/creationix/nvm.git ~/.nvm')
+    confirm_and_run('. ~/.bash_profile')
+    confirm_and_run('nvm install v0.8.8')
+    confirm_and_run('nvm alias default v0.8.8')
   end
 
   desc 'build and install Vim with Python and Ruby support'
   task :vim => ['install:homebrew', 'install:ruby:rvm', 'install:python:install'] do
-    system('brew install mercurial')
+    confirm_and_run('brew install mercurial')
     system('rvm use system')
 
     system('mkdir ~/Mercurial')
-    system('hg clone https://vim.googlecode.com/hg/ ~/Mercurial/vim')
+    confirm_and_run('hg clone https://vim.googlecode.com/hg/ ~/Mercurial/vim')
 
     cmd_prefix = 'cd ~/Mercurial/vim && '
-    commands = [
-      'hg pull',
-      'hg update',
+    cmds = ['hg pull', 'hg update']
+    sensitive_cmds = [
       './configure --prefix=/usr/local --enable-rubyinterp --enable-pythoninterp --with-features=huge',
       'make',
       'make install',
     ]
-    commands.each { |c| system("#{cmd_prefix} #{c}")}
+    cmds.each { |c| system("#{cmd_prefix} #{c}")}
+    sensitive_cmds.each { |c| confirm_and_run("#{cmd_prefix} #{c}")}
+  end
+
+  desc 'symlink useful scripts to /usr/local/bin'
+  task :scripts do
+    bin_dir = File.join(File.dirname(__FILE__), 'bin')
+    [ 'appcrush.rb' ].each do |f|
+      create_symlink(File.join(bin_dir, f), File.join('/usr', 'local', 'bin', f))
+    end
   end
 
 end
 
 def create_symlink(from, to, options={})
-  if confirm_overwrite(from, options)
+  if confirm_overwrite(to, options)
     rm_command = options[:is_dir] ? 'rm -rf' : 'rm'
 
-    system("#{rm_command} #{from}")
-    system("ln -s #{to} #{from}")
+    system("#{rm_command} #{to}")
+    system("ln -s #{from} #{to}")
+  end
+end
+
+def confirm_and_run(cmd)
+  input = ''
+  while input != 'y' && input != 'n'
+    puts "Run `#{cmd}` ? (y)es, (n)o, or (a)bort"
+    case $stdin.gets.chomp
+      when 'y'
+        system(cmd)
+        return true
+      when'n'
+        return false
+      when 'a'
+        exit 1
+    end
   end
 end
 
@@ -225,7 +247,7 @@ def confirm_overwrite(file, options={})
       return true
     when 'q'
       puts 'Aborting.'
-      exit
+      exit 1
     else
       return false
     end

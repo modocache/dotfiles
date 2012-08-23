@@ -9,3 +9,6 @@ tags-te
 # Python
 *.pyc
 *.pyo
+
+# Xcode
+*.xcuserdatad
