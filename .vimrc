@@ -50,6 +50,7 @@ Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
                                  " directly.
 Plugin 'scrooloose/nerdtree'  " Tree explorer.
 Plugin 'wincent/Command-T'  " Fuzzy file finder.
+Plugin 'tpope/vim-fugitive'  " Git integration.
 Plugin 'vim-scripts/AutoTag'  " Updates ctags entires automatically when saving.
 Plugin 'majutsushi/tagbar'  " Displays tags in a file in the sidebar.
 Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
@@ -109,8 +110,10 @@ endif
 " ---- Keybindings Setup ----
 map <leader>1 :NERDTreeToggle<CR>  " \1 toggles the nerdtree file tree.
 map <leader>2 :TagbarToggle<CR>  " \2 toggles the tag list sidebar.
-nmap <F3> <C-]>  " F3 jumps to definition uses the ctags binding.
-                 " FIXME: Learn to use the ctags binding instead.
+" <C-]> opens a tag definition in the current buffer.
+" <C-w> <C-]> opens it in a horizontal split.
+" This binding makes <C-v C-]> open it in a vertical split.
+map <C-v><C-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 map <leader>j :NERDTreeFind<CR>  " \j displays the current file in the file
                                  " tree.
 
@@ -121,6 +124,12 @@ set t_Co=256  " Use 256 colors.
 set background=dark  " Use a dark theme.
 colorscheme CandyPaper  " This color scheme is included in
                         " flazz/vim-colorschemes.
+set hlsearch  " Highlight searches.
+              " FIXME: Use the Gary Bernhardt trick to remove highlight after
+              "        hitting the enter key.
+set incsearch  " Highlight matches incrementally as pattern is typed.
+highlight Search cterm=NONE ctermfg=grey ctermbg=blue
+highlight IncSearch cterm=NONE ctermfg=grey ctermbg=blue
 set nowrap  " Never wrap lines.
 set number  " Display line numbers.
 syntax on  " Enable syntax highlighting.
@@ -130,11 +139,7 @@ set ruler  " Show the cursor position.
 set colorcolumn=81,121  " Display columns just after 80 and 120 characters.
 set esckeys  " Allow cursor keys in insert mode.
 set backspace=indent,eol,start  " Allow backspace in insert mode.
-set hlsearch  " Highlight searches.
-              " FIXME: Use the Gary Bernhardt trick to remove highlight after
-              "        hitting the enter key.
 set ignorecase  " Ignore case when searching.
-set incsearch  " Highlight matches incrementally as pattern is typed.
 set noerrorbells  " Disable error bells.
 set clipboard=unnamed  " Use the OS clipboard by default (on versions compiled
                        " with `+clipboard`).
@@ -156,11 +161,11 @@ if exists("&undodir")
 endif
 
 " ---- Window Size Setup ----
-set winwidth=84     " Set a normal width of 84 columns...
-set winminwidth=15  " ...with a minimum of 15 columns.
-set winheight=5     " We have to have a winheight bigger than we want to set
-set winminheight=5  " winminheight. But if we set winheight to be huge before
-set winheight=999   "  winminheight, the winminheight set will fail.
+set winwidth=84      " Set a normal width of 84 columns...
+set winminwidth=15   " ...with a minimum of 15 columns.
+set winheight=10     " We have to have a winheight bigger than we want to set
+set winminheight=10  " winminheight. But if we set winheight to be huge before
+set winheight=999    "  winminheight, the winminheight set will fail.
 
 " ---- Markdown Setup ----
 au BufRead,BufNewFile *.md set filetype=markdown  " Markdown doesnt seem to be
