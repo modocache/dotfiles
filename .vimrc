@@ -62,8 +62,8 @@ Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  " Fancy status
                                                                  " line.
 Plugin 'octol/vim-cpp-enhanced-highlight'  " Additional syntax highlighting for
                                            " C++.
-Plugin 'keith/swift.vim'  " Syntax highlighting for Swift.
-                          " FIXME: Use swift/utils/vim instead.
+Plugin 'apple/swift', { 'rtp': 'utils/vim' }  " Syntax highlighting for Swift,
+                                              " SIL, and .gyb files.
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
