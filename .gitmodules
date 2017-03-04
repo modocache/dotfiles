@@ -1,0 +1,3 @@
+[submodule "external/shellder"]
+	path = external/shellder
+	url = git@github.com:modocache/shellder.git
