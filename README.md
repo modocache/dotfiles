@@ -19,6 +19,7 @@ To set up the prompt I like, symlink it into your `fish` config:
 $ ln -s \
     `pwd`/external/shellder/fish_prompt.fish \
     ~/.config/fish/config.fish
+$ ln -s `pwd`/fishd.784f435c7983 ~/.config/fish/fishd.784f435c7983
 ```
 
 To set up the color scheme I like, run `fish_config` and select `colors > lava`.
