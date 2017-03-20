@@ -5,11 +5,11 @@
 scriptencoding utf-8  " this file is in utf-8
 
 " ---- Installation Instructions ----
-" 1. mkdir -p ~/.vim/backups ~/.vim/swaps ~/.vim/undo
+" 1. mkdir -p ~/local/.vim/backups ~/local/.vim/swaps ~/local/.vim/undo
 " 2. This .vimrc requires Vundle. You may install Vundle using the following
 "    command:
 "        git clone https://github.com/VundleVim/Vundle.vim.git \
-"            ~/.vim/bundle/Vundle.vim
+"            ~/local/.vim/bundle/Vundle.vim
 " 3. Open Vim and run :PluginInstall.
 " 4. Some plugins require additional setup:
 "    * wincent/Command-T: You'll need to have compiled Vim with Ruby support
@@ -18,14 +18,14 @@ scriptencoding utf-8  " this file is in utf-8
 "                         `apt-get install ruby2.1-dev`.
 "
 "                         Once you've installed those:
-"                             cd ~/.vim/bundle/Command-T/ruby/command-t
+"                             cd ~/local/.vim/bundle/Command-T/ruby/command-t
 "                             ruby extconf.rb
 "                             make
 "    * Valloric/YouCompleteMe: Run the following commands:
-"                                  cd ~/.vim/bundle/YouCompleteMe
+"                                  cd ~/local/.vim/bundle/YouCompleteMe
 "                                  ./install.py --clang-completer
 "                              You'll also want to add a .ycm_extra_config.py
-"                              to your ~/.vim directory.
+"                              to your ~/local/.vim directory.
 "    * Lokaltog/powerline: You'll need to install patched fonts on your
 "                          system:
 "                              git clone https://github.com/powerline/fonts.git
@@ -40,8 +40,8 @@ set nocompatible  " Don't emulate vi's limitations. This is also required for
                   " Vundle setup.
 filetype off  " Required for Vundle. This is re-enabled further down.
 
-set rtp+=~/.vim/bundle/Vundle.vim  " Include Vundle in the runtime path.
-call vundle#begin()  " Initialize Vundle.
+set rtp+=~/local/.vim/bundle/Vundle.vim  " Include Vundle in the runtime path.
+call vundle#begin('~/local/.vim/bundle')  " Initialize Vundle.
 
 Plugin 'gmarik/Vundle.vim'  " This plugin is required by Vundle itself.
 Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
@@ -74,13 +74,8 @@ call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
 
 " ---- Valloric/YouCompleteMe Setup ----
-let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"  " Not actually
-                                                               " used. Copy
-                                                               " this into
-                                                               " your
-                                                               " project's
-                                                               " root
-                                                               " directory.
+" Not actually used. Copy this into your project's root directory.
+let g:ycm_global_ycm_extra_conf = "~/local/.vim/.ycm_extra_conf.py"
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
                                                          " preview window once
                                                          " a completion has
@@ -159,10 +154,10 @@ set listchars=tab:▸\ ,trail:▝,eol:¬  " ...but only show tabs and trailing
                                      " whitespace.
 set shiftwidth=2  " By default, use two spaces to indent.
 set tabstop=2  " By default, tabs are represented by two spaces.
-set backupdir=~/.vim/backups  " Place backups, swap files, and undo history at
-set directory=~/.vim/swaps    " a specific location.
+set backupdir=~/local/.vim/backups  " Place backups, swap files, and undo
+set directory=~/local/.vim/swaps    " history at a specific location.
 if exists("&undodir")
-  set undodir=~/.vim/undo
+  set undodir=~/local/.vim/undo
 endif
 
 " ---- Window Size Setup ----
