@@ -21,11 +21,6 @@ scriptencoding utf-8  " this file is in utf-8
 "                             cd ~/local/.vim/bundle/Command-T/ruby/command-t
 "                             ruby extconf.rb
 "                             make
-"    * Valloric/YouCompleteMe: Run the following commands:
-"                                  cd ~/local/.vim/bundle/YouCompleteMe
-"                                  ./install.py --clang-completer
-"                              You'll also want to add a .ycm_extra_config.py
-"                              to your ~/local/.vim directory.
 "    * Lokaltog/powerline: You'll need to install patched fonts on your
 "                          system:
 "                              git clone https://github.com/powerline/fonts.git
@@ -55,8 +50,6 @@ Plugin 'vim-scripts/AutoTag'  " Updates ctags entires automatically when saving.
 Plugin 'majutsushi/tagbar'  " Displays tags in a file in the sidebar.
 Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
-Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
-                                 " notably C/C++/Objective-C via libclang.
 Plugin 'ntpeters/vim-better-whitespace'  " Highlights trailing whitespace.
 Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  " Fancy status
                                                                  " line.
@@ -72,24 +65,6 @@ Plugin 'http://llvm.org/git/llvm.git', {'rtp': 'utils/vim'}  " Syntax
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
-
-" ---- Valloric/YouCompleteMe Setup ----
-" Not actually used. Copy this into your project's root directory.
-let g:ycm_global_ycm_extra_conf = "~/local/.vim/.ycm_extra_conf.py"
-let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
-                                                         " preview window once
-                                                         " a completion has
-                                                         " been selected.
-let g:ycm_filepath_completion_use_working_dir = 1  " Use the current working
-                                                   " directory when
-                                                   " autocompleting file
-                                                   " paths.
-let g:ycm_collect_identifiers_from_tags_files = 1  " Use ctags identifiers when
-                                                   " available.
-let g:ycm_confirm_extra_conf = 0  " Trust .ycm_extra_conf.py scripts in project
-                                  " roots.
-" let g:ycm_server_use_vim_stdout = 1   " Uncomment these two settings
-" let g:ycm_server_log_level = 'debug'  " to debug.
 
 " ---- scrooloose/nerdtree Setup ----
 let NERDTreeShowHidden=1    " Show hidden files
