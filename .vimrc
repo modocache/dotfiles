@@ -35,6 +35,9 @@ set nocompatible  " Don't emulate vi's limitations. This is also required for
                   " Vundle setup.
 filetype off  " Required for Vundle. This is re-enabled further down.
 
+set shell=/bin/bash  " Vundle's commands, such as :PluginInstall, do not work
+                     " in fish shell. See:
+                     " https://github.com/VundleVim/Vundle.vim/issues/690
 set rtp+=~/local/.vim/bundle/Vundle.vim  " Include Vundle in the runtime path.
 call vundle#begin('~/local/.vim/bundle')  " Initialize Vundle.
 
