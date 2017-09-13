@@ -17,10 +17,20 @@ scriptencoding utf-8  " this file is in utf-8
 "                         alternative to comiling from source. You'll also need
 "                         `apt-get install ruby2.1-dev`.
 "
-"                         Once you've installed those:
-"                             cd ~/local/.vim/bundle/Command-T/ruby/command-t
-"                             ruby extconf.rb
-"                             make
+"                         If all else fails, compile Vim from source, with
+"                         Ruby enabled:
+"                             git clone https://github.com/vim/vim \
+"                               ~/local/Source/modocache/vim
+"                             cd ~/local/Source/modocache/vim
+"                             ./configure \
+"                               --enable-rubyinterp --enable-pythoninterp \
+"                               --enable-python3interp --enable-gui=no \
+"                               --enable-perlinterp --prefix=/usr/local
+"                             make; and sudo make install
+"
+"                         Once you've installed Vim:
+"                             cd ~/local/.vim/bundle/Command-T/ruby/command-t/ext/command-t
+"                             ruby extconf.rb; and make
 "    * Lokaltog/powerline: You'll need to install patched fonts on your
 "                          system:
 "                              git clone https://github.com/powerline/fonts.git
