@@ -28,9 +28,20 @@ scriptencoding utf-8  " this file is in utf-8
 "                               --enable-perlinterp --prefix=/usr/local
 "                             make; and sudo make install
 "
-"                         Once you've installed Vim:
-"                             cd ~/local/.vim/bundle/Command-T/ruby/command-t/ext/command-t
-"                             ruby extconf.rb; and make
+"                         Once you've installed those:
+"                             cd ~/.vim/bundle/Command-T/ruby/command-t
+"                             ruby extconf.rb
+"                             make
+"    * Valloric/YouCompleteMe: Run the following commands:
+"                                  cd ~/.vim/bundle/YouCompleteMe
+"                                  ./install.py --clang-completer
+"                              You'll also want to copy a YouCompleteMe config
+"                              that works for my typical LLVM repository
+"                              setup (it assumes 'llvm' and 'build'
+"                              directories at the same level):
+"                                  cp \
+"                                    .ycm_extra_conf.py.llvm \
+"                                    /path/to/llvm/.ycm_extra_conf.py
 "    * Lokaltog/powerline: You'll need to install patched fonts on your
 "                          system:
 "                              git clone https://github.com/powerline/fonts.git
@@ -68,6 +79,7 @@ Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  " Fancy status
                                                                  " line.
 Plugin 'octol/vim-cpp-enhanced-highlight'  " Additional syntax highlighting for
                                            " C++.
+Plugin 'rust-lang/rust.vim'  " Rust file detection and syntax highlighting.
 Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
                                               " SIL, and .gyb files.
 Plugin 'http://llvm.org/git/llvm.git', {'rtp': 'utils/vim'}  " Syntax
@@ -78,6 +90,27 @@ Plugin 'http://llvm.org/git/llvm.git', {'rtp': 'utils/vim'}  " Syntax
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
+
+" ---- Valloric/YouCompleteMe Setup ----
+let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
+                                                         " preview window once
+                                                         " a completion has
+                                                         " been selected.
+let g:ycm_autoclose_preview_window_after_insertion = 1  " Auto-close the
+                                                        " preview window when
+                                                        " exiting insert mode.
+let g:ycm_filepath_completion_use_working_dir = 1  " Use the current working
+                                                   " directory when
+                                                   " autocompleting file
+                                                   " paths.
+let g:ycm_confirm_extra_conf = 0  " Trust .ycm_extra_conf.py scripts in project
+                                  " roots.
+let g:ycm_enable_diagnostic_signs = 0 " Don't put any symbols into the Vim
+                                      " gutter on lines that contain errors,
+                                      " since that shifts the Vim panes around
+                                      " in a way I don't like.
+" let g:ycm_server_use_vim_stdout = 1   " Uncomment these two settings
+" let g:ycm_server_log_level = 'debug'  " to debug.
 
 " ---- scrooloose/nerdtree Setup ----
 let NERDTreeShowHidden=1    " Show hidden files
@@ -104,6 +137,9 @@ map <leader>2 :TagbarToggle<CR>  " \2 toggles the tag list sidebar.
 map <C-v><C-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 map <leader>j :NERDTreeFind<CR>  " \j displays the current file in the file
                                  " tree.
+
+let g:clang_format_path = "/Users/bgesiak/local/Source/fb/llvm-org/build/bin/clang-format"
+map <leader>f :pyf ~/local/Source/fb/llvm-org/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----
 set encoding=utf-8  " Default encoding should always be UTF-8.
