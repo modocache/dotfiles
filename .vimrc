@@ -74,9 +74,8 @@ Plugin 'vim-scripts/AutoTag'  " Updates ctags entires automatically when saving.
 Plugin 'majutsushi/tagbar'  " Displays tags in a file in the sidebar.
 Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
-Plugin 'ntpeters/vim-better-whitespace'  " Highlights trailing whitespace.
-Plugin 'Lokaltog/powerline', {'rtp': 'powerline/bindings/vim/'}  " Fancy status
-                                                                 " line.
+Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
+                                 " notably C/C++/Objective-C via libclang.
 Plugin 'octol/vim-cpp-enhanced-highlight'  " Additional syntax highlighting for
                                            " C++.
 Plugin 'rust-lang/rust.vim'  " Rust file detection and syntax highlighting.
@@ -117,8 +116,6 @@ let NERDTreeShowHidden=1    " Show hidden files
 let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
 
 " ---- Lokaltog/powerline Setup ----
-set laststatus=2  " Always include a status line; Powerline uses it to display
-                  " its fancy one.
 
 " ---- octol/vim-cpp-enhanced-highlight Setup ----
 let g:cpp_class_scope_highlight = 1
@@ -131,12 +128,16 @@ endif
 " ---- Keybindings Setup ----
 map <leader>1 :NERDTreeToggle<CR>  " \1 toggles the nerdtree file tree.
 map <leader>2 :TagbarToggle<CR>  " \2 toggles the tag list sidebar.
-" <C-]> opens a tag definition in the current buffer.
-" <C-w> <C-]> opens it in a horizontal split.
-" This binding makes <C-v C-]> open it in a vertical split.
-map <C-v><C-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 map <leader>j :NERDTreeFind<CR>  " \j displays the current file in the file
                                  " tree.
+" <C-]> opens a tag definition in the current buffer.
+map <leader>] :YcmCompleter GoTo<CR>  " \] opens the declaration or
+                                      " definition in the current buffer.
+map <leader>[ :YcmCompleter GetType<CR>  " \[ echoes the type of the text under
+                                         " the cursor.
+map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
+                                           " text under the cursor (i.e.: the
+                                           " name of the method it's in).
 
 let g:clang_format_path = "/Users/bgesiak/local/Source/fb/llvm-org/build/bin/clang-format"
 map <leader>f :pyf ~/local/Source/fb/llvm-org/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
@@ -161,6 +162,7 @@ set nostartofline  " Don't reset cursor to the start of the line when moving.
 set cursorline  " Highlight the current line.
 set ruler  " Show the cursor position.
 set colorcolumn=81,121  " Display columns just after 80 and 120 characters.
+set laststatus=2  " Two status lines; the second one displays a file name.
 set esckeys  " Allow cursor keys in insert mode.
 set backspace=indent,eol,start  " Allow backspace in insert mode.
 set ignorecase  " Ignore case when searching.
