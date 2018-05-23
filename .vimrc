@@ -70,7 +70,6 @@ Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
 Plugin 'scrooloose/nerdtree'  " Tree explorer.
 Plugin 'wincent/Command-T'  " Fuzzy file finder.
 Plugin 'tpope/vim-fugitive'  " Git integration.
-Plugin 'vim-scripts/AutoTag'  " Updates ctags entires automatically when saving.
 Plugin 'majutsushi/tagbar'  " Displays tags in a file in the sidebar.
 Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
@@ -112,8 +111,15 @@ let g:ycm_enable_diagnostic_signs = 0 " Don't put any symbols into the Vim
 " let g:ycm_server_log_level = 'debug'  " to debug.
 
 " ---- scrooloose/nerdtree Setup ----
-let NERDTreeShowHidden=1    " Show hidden files
+let NERDTreeShowHidden = 1    " Show hidden files
 let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
+
+" ---- wincent/Command-T Setup ----
+let g:CommandTTraverseSCM = 'pwd'  " Always use Vim's present working directory
+                                   " as the root for Command-T fuzzy file
+                                   " search. This has Command-T find results in
+                                   " llvm/ even when I've opened a file in
+                                   " llvm/tools/clang/.
 
 " ---- Lokaltog/powerline Setup ----
 
@@ -139,8 +145,8 @@ map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
                                            " text under the cursor (i.e.: the
                                            " name of the method it's in).
 
-let g:clang_format_path = "/Users/bgesiak/local/Source/fb/llvm-org/build/bin/clang-format"
-map <leader>f :pyf ~/local/Source/fb/llvm-org/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
+let g:clang_format_path = "/data/users/bgesiak/Source/fb/llvm/install/bin/clang-format"
+map <leader>f :pyf ~/local/Source/fb/llvm/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----
 set encoding=utf-8  " Default encoding should always be UTF-8.
