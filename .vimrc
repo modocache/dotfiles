@@ -155,9 +155,9 @@ map <leader>f :pyf ~/local/Source/fb/llvm/llvm/tools/clang/tools/clang-format/cl
 set encoding=utf-8  " Default encoding should always be UTF-8.
 set mouse=a  " Enable the mouse in all modes.
 set t_Co=256  " Use 256 colors.
-set background=dark  " Use a dark theme.
-colorscheme CandyPaper  " This color scheme is included in
-                        " flazz/vim-colorschemes.
+set background=light  " Use a light theme.
+colorscheme lucius  " This color scheme is included in
+                    " flazz/vim-colorschemes.
 set hlsearch  " Highlight searches.
               " FIXME: Use the Gary Bernhardt trick to remove highlight after
               "        hitting the enter key.
