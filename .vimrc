@@ -121,6 +121,9 @@ let g:CommandTTraverseSCM = 'pwd'  " Always use Vim's present working directory
                                    " llvm/ even when I've opened a file in
                                    " llvm/tools/clang/.
 
+" ---- tpope/vim-fugitive Setup ----
+autocmd QuickFixCmdPost *grep* cwindow
+
 " ---- Lokaltog/powerline Setup ----
 
 " ---- octol/vim-cpp-enhanced-highlight Setup ----
@@ -145,7 +148,7 @@ map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
                                            " text under the cursor (i.e.: the
                                            " name of the method it's in).
 
-let g:clang_format_path = "/data/users/bgesiak/Source/fb/llvm/install/bin/clang-format"
+let g:clang_format_path = "/Users/bgesiak/Source/fb/llvm/install/bin/clang-format"
 map <leader>f :pyf ~/local/Source/fb/llvm/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----
