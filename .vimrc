@@ -148,8 +148,8 @@ map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
                                            " text under the cursor (i.e.: the
                                            " name of the method it's in).
 
-let g:clang_format_path = "/Users/bgesiak/Source/fb/llvm/install/bin/clang-format"
-map <leader>f :pyf ~/local/Source/fb/llvm/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
+let g:clang_format_path = "/Users/bgesiak/Source/llvm/git/system/install/bin/clang-format"
+map <leader>f :pyf ~/local/Source/llvm/git/system/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----
 set encoding=utf-8  " Default encoding should always be UTF-8.
