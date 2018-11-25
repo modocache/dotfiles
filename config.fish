@@ -19,7 +19,7 @@ set -g fish_color_search_match bryellow\x1e\x2d\x2dbackground\x3dbrblack
 set -g fish_color_selection white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
 set -g fish_color_status red
 set -g fish_color_user brgreen
-set -g fish_color_valid_path \x2d\x2dunderline
+set -g fish_color_valid_path
 set -g fish_pager_color_completion \x1d
 set -g fish_pager_color_description B3A06D\x1eyellow
 set -g fish_pager_color_prefix white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
