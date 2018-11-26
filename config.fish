@@ -39,20 +39,33 @@ function prompt_git -d "Display the current Git status"
     set -l stat (command git status --porcelain 2>/dev/null)
     set -l staged (command git diff --staged 2>/dev/null)
     set -l unstaged (command git diff 2>/dev/null)
+    set -l untracked (command git ls-files . --exclude-standard --others 2>/dev/null)
 
     # Set the text color based on the dirtiness of the repository.
-    if test -n "$stat"
-      if test -n "$staged"
-        if test -n "$unstaged"
-          set_color yellow
+    if test -z "$stat"
+      # Nothing modified.
+      set_color green
+    else
+      # There must be staged or unstaged changes, or untracked files.
+      if test -z "$staged"
+        # Nothing staged.
+        if test -z "$unstaged"
+          # Nothing staged or unstaged, there must be untracked files.
+          set_color red
         else
-          set_color $vcs_modified_and_untracked_color
+          # No staged, only unstaged changes.
+          set_color yellow
         end
       else
-        set_color red
+        # Staged changes.
+        if test -z "$unstaged"
+          # Only staged changes, no unstaged.
+          set_color yellow
+        else
+          # Staged and unstaged changes.
+          set_color $vcs_modified_and_untracked_color
+        end
       end
-    else
-      set_color green
     end
 
     echo -n " ("
@@ -74,11 +87,13 @@ function prompt_git -d "Display the current Git status"
     # of the repository -- for when copy-pasting output from commands run in
     # dirty repositories.
     if test -n "$stat"
-      echo -n "*"
       if test -n "$staged"
         echo -n "+"
       end
       if test -n "$unstaged"
+        echo -n "*"
+      end
+      if test -n "$untracked"
         echo -n "?"
       end
     end
