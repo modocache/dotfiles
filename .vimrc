@@ -29,7 +29,8 @@ scriptencoding utf-8  " this file is in utf-8
 "                             make; and sudo make install
 "
 "                         Once you've installed those:
-"                             cd ~/.vim/bundle/Command-T/ruby/command-t
+"                             cd ~/.vim/bundle/Command-T
+"                             cd ruby/command-t/ext/command-t
 "                             ruby extconf.rb
 "                             make
 "    * Valloric/YouCompleteMe: Run the following commands:
@@ -156,7 +157,7 @@ set encoding=utf-8  " Default encoding should always be UTF-8.
 set mouse=a  " Enable the mouse in all modes.
 set t_Co=256  " Use 256 colors.
 set background=light  " Use a light theme.
-colorscheme lucius  " This color scheme is included in
+colorscheme PaperColor  " This color scheme is included in
                     " flazz/vim-colorschemes.
 set hlsearch  " Highlight searches.
               " FIXME: Use the Gary Bernhardt trick to remove highlight after
