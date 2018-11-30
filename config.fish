@@ -213,6 +213,9 @@ function fish_prompt
     echo -n "× "
   end
 
+  set_color b2ffb2
+  echo -n -s (date "+%m-%d-%y %H:%M:%S ")
+
   set_color $fish_color_cwd
   echo -n -s (prompt_pwd)
 
