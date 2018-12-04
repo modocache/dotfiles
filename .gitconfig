@@ -1,0 +1,8 @@
+[user]
+	email = modocache@gmail.com
+	name = Brian Gesiak
+[core]
+	excludesfile = ~/.gitignore
+	editor = vim
+[grep]
+	lineNumber = true

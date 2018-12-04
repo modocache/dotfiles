@@ -1,3 +1,7 @@
+# Disable fish greeting.
+set fish_greeting
+
+
 # Configure fish shell colors.
 set -g fish_color_autosuggestion 7596E4
 set -g fish_color_command 164CC9

@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# Ctags
+tags
+
+# Vim YouCompleteMe
+.ycm_extra_conf.py
+
