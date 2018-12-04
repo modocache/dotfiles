@@ -233,6 +233,10 @@ end
 # engineers.
 alias llvm-arc "~/local/Source/llvm/utils/arcanist/bin/arc"
 
+# Prepend my locally built Vim directory to my PATH.
+set -U fish_user_paths ~/local/Source/modocache/vim/install/bin $fish_user_paths
+# Prepend Homebrew 'brew' executable to my PATH.
+set -U fish_user_paths ~/local/.brew/bin $fish_user_paths
 
 # Append my locally built LLVM bin directory to my PATH. This keeps
 # 'which clang' pointing to macOS's '/usr/bin/clang', but extra tools like
