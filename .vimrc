@@ -12,27 +12,6 @@ scriptencoding utf-8  " this file is in utf-8
 "            ~/local/.vim/bundle/Vundle.vim
 " 3. Open Vim and run :PluginInstall.
 " 4. Some plugins require additional setup:
-"    * wincent/Command-T: You'll need to have compiled Vim with Ruby support
-"                         enabled. On Linux, `apt-get install vim.nox` is an
-"                         alternative to comiling from source. You'll also need
-"                         `apt-get install ruby2.1-dev`.
-"
-"                         If all else fails, compile Vim from source, with
-"                         Ruby enabled:
-"                             git clone https://github.com/vim/vim \
-"                               ~/local/Source/modocache/vim
-"                             cd ~/local/Source/modocache/vim
-"                             ./configure \
-"                               --enable-rubyinterp --enable-pythoninterp \
-"                               --enable-python3interp --enable-gui=no \
-"                               --enable-perlinterp --prefix=/usr/local
-"                             make; and sudo make install
-"
-"                         Once you've installed those:
-"                             cd ~/.vim/bundle/Command-T
-"                             cd ruby/command-t/ext/command-t
-"                             ruby extconf.rb
-"                             make
 "    * Valloric/YouCompleteMe: Run the following commands:
 "                                  cd ~/.vim/bundle/YouCompleteMe
 "                                  ./install.py --clang-completer
@@ -60,9 +39,14 @@ Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
                                  " some reason this theme looks better than
                                  " when I include dfxyz/CandyPaper.vim
                                  " directly.
+Plugin 'ctrlpvim/ctrlp.vim.git'  " Fuzzy finder.
+Plugin 'JazzCore/ctrlp-cmatcher'  " The default matcher in ctrlp.vim is
+                                  " god awful. 'opt.cpp' doesn't find the file
+                                  " 'tools/opt/opt.cpp'...?! Replace it with
+                                  " something reasonable.
 Plugin 'scrooloose/nerdtree'  " Tree explorer.
-Plugin 'wincent/Command-T'  " Fuzzy file finder.
 Plugin 'tpope/vim-fugitive'  " Git integration.
+Plugin 'tomtom/tcomment_vim'  " Comment out blocks of code.
 Plugin 'majutsushi/tagbar'  " Displays tags in a file in the sidebar.
 Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
@@ -107,13 +91,25 @@ let g:ycm_enable_diagnostic_signs = 0 " Don't put any symbols into the Vim
 let NERDTreeShowHidden = 1    " Show hidden files
 let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
 
-" ---- wincent/Command-T Setup ----
-let g:CommandTTraverseSCM = 'pwd'  " Always use Vim's present working directory
-                                   " as the root for Command-T fuzzy file
-                                   " search. This has Command-T find results in
-                                   " llvm/ even when I've opened a file in
-                                   " llvm/tools/clang/.
-
+" ---- ctrlpvim/ctrlp.vim.git Setup ----
+" Use a reasonable matcher function: the one provided by
+" JazzCore/ctrlp-cmatcher.
+let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
+" Normally use a VCS to list files -- except when in an LLVM directory, which
+" contains nested Git respositories. In that case, I want to search from all
+" files in each of the nested repositories -- but exclude the build directory.
+let g:ctrlp_user_command = {
+  \ 'types': {
+    \ 1: ['LLVMBuild.txt', 'find %s -type f \( ! -path "./build/*" \)'],
+    \ 2: ['.git', 'cd %s && git ls-files'],
+    \ 3: ['.hg', 'hg --cwd %s locate -I .'],
+    \ },
+  \ 'fallback': 'find %s -type f'
+  \ }
+" Don't change anything about the working path, regardless of which file we
+" open in the buffer.
+let g:ctrlp_working_path_mode = ''
+let g:ctrlp_extensions = ['line']
 " ---- tpope/vim-fugitive Setup ----
 autocmd QuickFixCmdPost *grep* cwindow
 
