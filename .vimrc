@@ -43,14 +43,6 @@ scriptencoding utf-8  " this file is in utf-8
 "                                  cp \
 "                                    .ycm_extra_conf.py.llvm \
 "                                    /path/to/llvm/.ycm_extra_conf.py
-"    * Lokaltog/powerline: You'll need to install patched fonts on your
-"                          system:
-"                              git clone https://github.com/powerline/fonts.git
-"                              cd fonts
-"                              ./install.sh
-"                          Then, set your terminal's font to one of the
-"                          patched fonts. My favorite is Meslo LG S Regular
-"                          for Powerline, 12pt.
 
 " ---- Vundle Setup ----
 set nocompatible  " Don't emulate vi's limitations. This is also required for
@@ -125,8 +117,6 @@ let g:CommandTTraverseSCM = 'pwd'  " Always use Vim's present working directory
 " ---- tpope/vim-fugitive Setup ----
 autocmd QuickFixCmdPost *grep* cwindow
 
-" ---- Lokaltog/powerline Setup ----
-
 " ---- octol/vim-cpp-enhanced-highlight Setup ----
 let g:cpp_class_scope_highlight = 1
 
@@ -149,7 +139,7 @@ map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
                                            " text under the cursor (i.e.: the
                                            " name of the method it's in).
 
-let g:clang_format_path = "/Users/bgesiak/Source/llvm/git/system/install/bin/clang-format"
+let g:clang_format_path = "/Users/modocache/Source/llvm/git/system/install/bin/clang-format"
 map <leader>f :pyf ~/local/Source/llvm/git/system/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----

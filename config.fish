@@ -206,7 +206,7 @@ function prompt_svn -d "Display the current Subversion status"
     end
 
     # Print the closing paren.
-    echo ")"
+    echo -n ")"
   end
 end
 
@@ -237,6 +237,9 @@ end
 # engineers.
 alias llvm-arc "~/local/Source/llvm/utils/arcanist/bin/arc"
 
+# Prepare adding custom PATH by first clearing out any that have been set
+# before.
+set -U fish_user_paths
 # Prepend my locally built Vim directory to my PATH.
 set -U fish_user_paths ~/local/Source/modocache/vim/install/bin $fish_user_paths
 # Prepend Homebrew 'brew' executable to my PATH.
