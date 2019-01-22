@@ -12,6 +12,9 @@ scriptencoding utf-8  " this file is in utf-8
 "            ~/local/.vim/bundle/Vundle.vim
 " 3. Open Vim and run :PluginInstall.
 " 4. Some plugins require additional setup:
+"    * JazzCore/ctrlp-cmatcher: Compile the plugin:
+"                                   cd ~/.vim/bundle/ctrlp-cmatcher
+"                                   ./install.sh
 "    * Valloric/YouCompleteMe: Run the following commands:
 "                                  cd ~/.vim/bundle/YouCompleteMe
 "                                  ./install.py --clang-completer
