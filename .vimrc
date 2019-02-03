@@ -69,6 +69,12 @@ Plugin 'http://llvm.org/git/llvm.git', {'rtp': 'utils/vim'}  " Syntax
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
 
+" --- ctrlpvim/ctrlp Setup ---
+" Display the window at the bottom (default), order it bottom-to-top
+" (default), with a minimum height of 1, maximum of 5, and displaying 5
+" results.
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:5,results:5'
+
 " ---- Valloric/YouCompleteMe Setup ----
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
                                                          " preview window once
@@ -188,9 +194,9 @@ endif
 " ---- Window Size Setup ----
 set winwidth=84      " Set a normal width of 84 columns...
 set winminwidth=15   " ...with a minimum of 15 columns.
-set winheight=10     " We have to have a winheight bigger than we want to set
-set winminheight=10  " winminheight. But if we set winheight to be huge before
-set winheight=999    "  winminheight, the winminheight set will fail.
+set winheight=5     " We have to have a winheight bigger than we want to set
+set winminheight=5  " winminheight. But if we set winheight to be huge before
+set winheight=999    " winminheight, the winminheight set will fail.
 
 " ---- Markdown Setup ----
 au BufRead,BufNewFile *.md set filetype=markdown  " Markdown doesnt seem to be
