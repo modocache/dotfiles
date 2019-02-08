@@ -12,9 +12,6 @@ scriptencoding utf-8  " this file is in utf-8
 "            ~/local/.vim/bundle/Vundle.vim
 " 3. Open Vim and run :PluginInstall.
 " 4. Some plugins require additional setup:
-"    * JazzCore/ctrlp-cmatcher: Compile the plugin:
-"                                   cd ~/.vim/bundle/ctrlp-cmatcher
-"                                   ./install.sh
 "    * Valloric/YouCompleteMe: Run the following commands:
 "                                  cd ~/.vim/bundle/YouCompleteMe
 "                                  ./install.py --clang-completer
@@ -43,10 +40,10 @@ Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
                                  " when I include dfxyz/CandyPaper.vim
                                  " directly.
 Plugin 'ctrlpvim/ctrlp.vim.git'  " Fuzzy finder.
-Plugin 'JazzCore/ctrlp-cmatcher'  " The default matcher in ctrlp.vim is
-                                  " god awful. 'opt.cpp' doesn't find the file
-                                  " 'tools/opt/opt.cpp'...?! Replace it with
-                                  " something reasonable.
+Plugin 'FelikZ/ctrlp-py-cmatcher'  " The default matcher in ctrlp.vim is
+                                   " god awful. 'opt.cpp' doesn't find the file
+                                   " 'tools/opt/opt.cpp'...?! Replace it with
+                                   " something reasonable.
 Plugin 'scrooloose/nerdtree'  " Tree explorer.
 Plugin 'tpope/vim-fugitive'  " Git integration.
 Plugin 'tomtom/tcomment_vim'  " Comment out blocks of code.
@@ -68,12 +65,6 @@ Plugin 'http://llvm.org/git/llvm.git', {'rtp': 'utils/vim'}  " Syntax
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
-
-" --- ctrlpvim/ctrlp Setup ---
-" Display the window at the bottom (default), order it bottom-to-top
-" (default), with a minimum height of 1, maximum of 5, and displaying 5
-" results.
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:5,results:5'
 
 " ---- Valloric/YouCompleteMe Setup ----
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
@@ -101,9 +92,8 @@ let NERDTreeShowHidden = 1    " Show hidden files
 let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
 
 " ---- ctrlpvim/ctrlp.vim.git Setup ----
-" Use a reasonable matcher function: the one provided by
-" JazzCore/ctrlp-cmatcher.
-let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
+" Use a reasonable matcher function.
+let g:ctrlp_match_func = {'match' : 'pymatcher#PyMatch' }
 " Normally use a VCS to list files -- except when in an LLVM directory, which
 " contains nested Git respositories. In that case, I want to search from all
 " files in each of the nested repositories -- but exclude the build directory.
@@ -119,6 +109,11 @@ let g:ctrlp_user_command = {
 " open in the buffer.
 let g:ctrlp_working_path_mode = ''
 let g:ctrlp_extensions = ['line']
+" Display the window at the bottom (default), order it bottom-to-top
+" (default), with a minimum height of 1, maximum of 5, and displaying 5
+" results.
+let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:5,results:5'
+
 " ---- tpope/vim-fugitive Setup ----
 autocmd QuickFixCmdPost *grep* cwindow
 
