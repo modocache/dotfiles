@@ -1,195 +1,98 @@
-# This file is NOT licensed under the GPLv3, which is the license for the rest
-# of YouCompleteMe.
-#
-# Here's the license text for this file:
-#
-# This is free and unencumbered software released into the public domain.
-#
-# Anyone is free to copy, modify, publish, use, compile, sell, or
-# distribute this software, either in source code form or as a compiled
-# binary, for any purpose, commercial or non-commercial, and by any
-# means.
-#
-# In jurisdictions that recognize copyright laws, the author or authors
-# of this software dedicate any and all copyright interest in the
-# software to the public domain. We make this dedication for the benefit
-# of the public at large and to the detriment of our heirs and
-# successors. We intend this dedication to be an overt act of
-# relinquishment in perpetuity of all present and future rights to this
-# software under copyright law.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-# IN NO EVENT SHALL THE AUTHORS BE LIABLE FOR ANY CLAIM, DAMAGES OR
-# OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
-# ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-# OTHER DEALINGS IN THE SOFTWARE.
-#
-# For more information, please refer to <http://unlicense.org/>
-
-# This is mostly copied from https://github.com/Valloric/ycmd/blob/b3643cecd7cf152b79d82ca42741969b4d06fc71/cpp/ycm/.ycm_extra_conf.py.
-# However, when no compile_commands.json is present, this script surfaces no
-# errors -- it doesn't even try to autocomplete.
-
 import os
 import ycm_core
 
-# These are the compilation flags that will be used in case there's no
-# compilation database set (by default, one is not set).
-# CHANGE THIS LIST OF FLAGS. YES, THIS IS THE DROID YOU HAVE BEEN LOOKING FOR.
-flags = [
-'-Wall',
-'-Wextra',
-'-Werror',
-'-Wc++98-compat',
-'-Wno-long-long',
-'-Wno-variadic-macros',
-'-fexceptions',
-'-DNDEBUG',
-# You 100% do NOT need -DUSE_CLANG_COMPLETER in your flags; only the YCM
-# source code needs it.
-'-DUSE_CLANG_COMPLETER',
-# THIS IS IMPORTANT! Without a "-std=<something>" flag, clang won't know which
-# language to use when compiling headers. So it will guess. Badly. So C++
-# headers will be compiled as C headers. You don't want that so ALWAYS specify
-# a "-std=<something>".
-# For a C project, you would set this to something like 'c99' instead of
-# 'c++11'.
-'-std=c++11',
-# ...and the same thing goes for the magic -x option which specifies the
-# language that the files to be compiled are written in. This is mostly
-# relevant for c++ headers.
-# For a C project, you would set this to 'c' instead of 'c++'.
-'-x',
-'c++',
-'-isystem',
-'../BoostParts',
-'-isystem',
-# This path will only work on OS X, but extra paths that don't exist are not
-# harmful
-'/System/Library/Frameworks/Python.framework/Headers',
-'-isystem',
-'../llvm/include',
-'-isystem',
-'../llvm/tools/clang/include',
-'-I',
-'.',
-'-I',
-'./ClangCompleter',
-'-isystem',
-'./tests/gmock/gtest',
-'-isystem',
-'./tests/gmock/gtest/include',
-'-isystem',
-'./tests/gmock',
-'-isystem',
-'./tests/gmock/include',
-]
+
+HEADER_EXTENSIONS = ['.h', '.hxx', '.hpp', '.hh']
+SOURCE_EXTENSIONS = ['.cpp', '.cxx', '.cc', '.c', '.m', '.mm']
 
 
-# Set this to the absolute path to the folder (NOT the file!) containing the
-# compile_commands.json file to use that instead of 'flags'. See here for
-# more details: http://clang.llvm.org/docs/JSONCompilationDatabase.html
-#
-# You can get CMake to generate this file for you by adding:
-#   set( CMAKE_EXPORT_COMPILE_COMMANDS 1 )
-# to your CMakeLists.txt file.
-#
-# Most projects will NOT need to set this to anything; you can just change the
-# 'flags' list of compilation flags. Notice that YCM itself uses that approach.
-compilation_database_folder = os.path.join(
-  os.path.dirname(os.path.abspath(__file__)),
-  'build',
-)
+def is_header(filename):
+  return os.path.splitext(filename)[-1] in HEADER_EXTENSIONS
 
-if os.path.exists( compilation_database_folder ):
-  database = ycm_core.CompilationDatabase( compilation_database_folder )
+
+def absolutify_path(path, working_directory):
+    if os.path.isabs(path):
+        return path
+    else:
+        return os.path.join(working_directory, path)
+
+
+def absolutify_args(args, working_directory):
+    absolutified_args = []
+
+    make_next_absolute = False
+    for arg in args:
+        # The arguments could be something like:
+        # a) [..., '-isystem' '../some/path', ...], or
+        # b) [..., '-I../some/path', ...]
+
+        if make_next_absolute:
+            make_next_absolute = False
+            arg = absolutify_path(arg, working_directory)
+
+        for option in ['-isystem', '-I', '-iquote', '--sysroot=']:
+            if arg == option:
+                # This is case (a) above: we don't modify the current argument,
+                # but we remember that the next argument should be made
+                # absolute.
+                make_next_absolute = True
+                break
+            elif arg.startswith(option):
+                # This is case (b) above: we split the argument, absolutify it,
+                # then put it back together.
+                path = arg[len(option):]
+                arg = option + absolutify_path(path, working_directory)
+                break
+
+        absolutified_args.append(arg)
+
+    return absolutified_args
+
+
+def get_compilation_info_for_file(filename, compile_commands):
+    if is_header(filename):
+        # The compilation_commands.json file generated by CMake does not have
+        # entries for header files. So we do our best by finding arguments for a
+        # corresponding source file, if any. If one exists, the arguments for
+        # that file are used as an approximation.
+        basename = os.path.splitext(filename)[0]
+        for extension in SOURCE_EXTENSIONS:
+            src_file = basename + extension
+            if os.path.exists(src_file):
+                info = compile_commands.GetCompilationInfoForFile(src_file)
+                if info.compiler_flags_:
+                    return info
+        # Couldn't find a corresponding source file, so just return nothing.
+        return None
+
+    return compile_commands.GetCompilationInfoForFile(filename)
+
+
+COMPILE_COMMANDS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                    'build')
+if os.path.exists(COMPILE_COMMANDS_DIR):
+    COMPILE_COMMANDS = ycm_core.CompilationDatabase(COMPILE_COMMANDS_DIR)
 else:
-  database = None
-
-SOURCE_EXTENSIONS = [ '.cpp', '.cxx', '.cc', '.c', '.m', '.mm' ]
-
-def DirectoryOfThisScript():
-  return os.path.dirname( os.path.abspath( __file__ ) )
+    COMPILE_COMMANDS = None
 
 
-def MakeRelativePathsInFlagsAbsolute( flags, working_directory ):
-  if not working_directory:
-    return list( flags )
-  new_flags = []
-  make_next_absolute = False
-  path_flags = [ '-isystem', '-I', '-iquote', '--sysroot=' ]
-  for flag in flags:
-    new_flag = flag
+def FlagsForFile(filename, **kwargs):
+    compile_commands = COMPILE_COMMANDS
+    if not compile_commands:
+        return {
+            'flags': [],
+            'do_cache': False
+        }
 
-    if make_next_absolute:
-      make_next_absolute = False
-      if not flag.startswith( '/' ):
-        new_flag = os.path.join( working_directory, flag )
-
-    for path_flag in path_flags:
-      if flag == path_flag:
-        make_next_absolute = True
-        break
-
-      if flag.startswith( path_flag ):
-        path = flag[ len( path_flag ): ]
-        new_flag = path_flag + os.path.join( working_directory, path )
-        break
-
-    if new_flag:
-      new_flags.append( new_flag )
-  return new_flags
-
-
-def IsHeaderFile( filename ):
-  extension = os.path.splitext( filename )[ 1 ]
-  return extension in [ '.h', '.hxx', '.hpp', '.hh' ]
-
-
-def GetCompilationInfoForFile( filename ):
-  # The compilation_commands.json file generated by CMake does not have entries
-  # for header files. So we do our best by asking the db for flags for a
-  # corresponding source file, if any. If one exists, the flags for that file
-  # should be good enough.
-  if IsHeaderFile( filename ):
-    basename = os.path.splitext( filename )[ 0 ]
-    for extension in SOURCE_EXTENSIONS:
-      replacement_file = basename + extension
-      if os.path.exists( replacement_file ):
-        compilation_info = database.GetCompilationInfoForFile(
-          replacement_file )
-        if compilation_info.compiler_flags_:
-          return compilation_info
-    return None
-  return database.GetCompilationInfoForFile( filename )
-
-
-def FlagsForFile( filename, **kwargs ):
-  # NOTE: This is the main change between this and upstream: if we don't have
-  #       a compile commands database, just return an empty set of flags.
-  if not database:
-    return {
-      'flags': [],
-      'do_cache': False
-    }
-
-  if database:
-    # Bear in mind that compilation_info.compiler_flags_ does NOT return a
-    # python list, but a "list-like" StringVec object
-    compilation_info = GetCompilationInfoForFile( filename )
+    compilation_info = get_compilation_info_for_file(filename,
+                                                     compile_commands)
     if not compilation_info:
-      return None
+        return None
 
-    final_flags = MakeRelativePathsInFlagsAbsolute(
-      compilation_info.compiler_flags_,
-      compilation_info.compiler_working_dir_ )
-  else:
-    relative_to = DirectoryOfThisScript()
-    final_flags = MakeRelativePathsInFlagsAbsolute( flags, relative_to )
+    flags = absolutify_args(compilation_info.compiler_flags_,
+                            compilation_info.compiler_working_dir_)
 
-  return {
-    'flags': final_flags,
-    'do_cache': True
-  }
+    return {
+        'flags': flags,
+        'do_cache': True
+    }
