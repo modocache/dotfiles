@@ -64,6 +64,7 @@ call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
 
 " ---- Valloric/YouCompleteMe Setup ----
+let g:ycm_use_clangd = 0
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
                                                          " preview window once
                                                          " a completion has
