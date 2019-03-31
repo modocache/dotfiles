@@ -40,10 +40,10 @@ Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
                                  " when I include dfxyz/CandyPaper.vim
                                  " directly.
 Plugin 'ctrlpvim/ctrlp.vim.git'  " Fuzzy finder.
-Plugin 'FelikZ/ctrlp-py-cmatcher'  " The default matcher in ctrlp.vim is
-                                   " god awful. 'opt.cpp' doesn't find the file
-                                   " 'tools/opt/opt.cpp'...?! Replace it with
-                                   " something reasonable.
+Plugin 'FelikZ/ctrlp-py-matcher'  " The default matcher in ctrlp.vim is
+                                  " god awful. 'opt.cpp' doesn't find the file
+                                  " 'tools/opt/opt.cpp'...?! Replace it with
+                                  " something reasonable.
 Plugin 'scrooloose/nerdtree'  " Tree explorer.
 Plugin 'tpope/vim-fugitive'  " Git integration.
 Plugin 'tomtom/tcomment_vim'  " Comment out blocks of code.
