@@ -64,7 +64,9 @@ call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
 
 " ---- Valloric/YouCompleteMe Setup ----
-let g:ycm_use_clangd = 0
+let g:ycm_use_clangd = 0  " Use libclang, not clangd. I don't know how to pass
+                          " compile_commands.json arguments to clangd, like I
+                          " do for libclang in my .ycm_extra_conf.py.
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
                                                          " preview window once
                                                          " a completion has
