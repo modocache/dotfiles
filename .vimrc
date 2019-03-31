@@ -99,11 +99,11 @@ let g:ctrlp_match_func = {'match' : 'pymatcher#PyMatch' }
 " files in each of the nested repositories -- but exclude the build directory.
 let g:ctrlp_user_command = {
   \ 'types': {
-    \ 1: ['LLVMBuild.txt', 'find %s -type f \( ! -path "./build/*" \)'],
+    \ 1: ['LLVMBuild.txt', 'find %s -type f -not -path "*.git/*" -not -path "*build/*"'],
     \ 2: ['.git', 'cd %s && git ls-files'],
     \ 3: ['.hg', 'hg --cwd %s locate -I .'],
     \ },
-  \ 'fallback': 'find %s -type f'
+  \ 'fallback': 'find %s -type f -not -path "*.git/*" -not -path "*build/*"'
   \ }
 " Don't change anything about the working path, regardless of which file we
 " open in the buffer.
