@@ -57,11 +57,8 @@ Plugin 'octol/vim-cpp-enhanced-highlight'  " Additional syntax highlighting for
 Plugin 'rust-lang/rust.vim'  " Rust file detection and syntax highlighting.
 Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
                                               " SIL, and .gyb files.
-Plugin 'http://llvm.org/git/llvm.git', {'rtp': 'utils/vim'}  " Syntax
-                                                             " highlighting for
-                                                             " LLVM *.ll and
-                                                             " tablegen *.td
-                                                             " files.
+" Syntax highlighting for LLVM *.ll and tablegen *.td files.
+Plugin 'https://git.llvm.org/git/llvm.git', {'rtp': 'utils/vim'}
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
