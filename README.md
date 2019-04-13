@@ -6,7 +6,7 @@ My preferred configuration files.
 
 Use `brew install fish` to install [fish](https://fishshell.com).
 
-To make `fish` the default shell, add `/usr/local/bin/fish` to `/etc/shells`,
+To make `fish` the default shell, add `/usr/bin/fish` to `/etc/shells`,
 then run the following command:
 
 ```

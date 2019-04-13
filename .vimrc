@@ -5,11 +5,11 @@
 scriptencoding utf-8  " this file is in utf-8
 
 " ---- Installation Instructions ----
-" 1. mkdir -p ~/local/.vim/backups ~/local/.vim/swaps ~/local/.vim/undo
+" 1. mkdir -p ~/.vim/backups ~/.vim/swaps ~/.vim/undo
 " 2. This .vimrc requires Vundle. You may install Vundle using the following
 "    command:
 "        git clone https://github.com/VundleVim/Vundle.vim.git \
-"            ~/local/.vim/bundle/Vundle.vim
+"            ~/.vim/bundle/Vundle.vim
 " 3. Open Vim and run :PluginInstall.
 " 4. Some plugins require additional setup:
 "    * Valloric/YouCompleteMe: Run the following commands:
@@ -31,8 +31,8 @@ filetype off  " Required for Vundle. This is re-enabled further down.
 set shell=/bin/bash  " Vundle's commands, such as :PluginInstall, do not work
                      " in fish shell. See:
                      " https://github.com/VundleVim/Vundle.vim/issues/690
-set rtp+=~/local/.vim/bundle/Vundle.vim  " Include Vundle in the runtime path.
-call vundle#begin('~/local/.vim/bundle')  " Initialize Vundle.
+set rtp+=~/.vim/bundle/Vundle.vim  " Include Vundle in the runtime path.
+call vundle#begin('~/.vim/bundle')  " Initialize Vundle.
 
 Plugin 'gmarik/Vundle.vim'  " This plugin is required by Vundle itself.
 Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
@@ -140,7 +140,7 @@ map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
                                            " name of the method it's in).
 
 let g:clang_format_path = "/Users/modocache/Source/llvm/git/system/install/bin/clang-format"
-map <leader>f :pyf ~/local/Source/llvm/git/system/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
+map <leader>f :pyf ~/Source/llvm/git/system/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----
 set encoding=utf-8  " Default encoding should always be UTF-8.
@@ -180,10 +180,10 @@ set listchars=tab:▸\ ,trail:▝,eol:¬  " ...but only show tabs and trailing
                                      " whitespace.
 set shiftwidth=2  " By default, use two spaces to indent.
 set tabstop=2  " By default, tabs are represented by two spaces.
-set backupdir=~/local/.vim/backups  " Place backups, swap files, and undo
-set directory=~/local/.vim/swaps    " history at a specific location.
+set backupdir=~/.vim/backups  " Place backups, swap files, and undo
+set directory=~/.vim/swaps    " history at a specific location.
 if exists("&undodir")
-  set undodir=~/local/.vim/undo
+  set undodir=~/.vim/undo
 endif
 
 " ---- Window Size Setup ----

@@ -235,17 +235,25 @@ end
 # Set up an alias for using upstream Arcanist. I can't use its 'arc' directly
 # because that conflicts with the 'arc' executable that's vended to Facebook
 # engineers.
-alias llvm-arc "~/local/Source/llvm/utils/arcanist/bin/arc"
+alias llvm-arc "~/Source/llvm/utils/arcanist/bin/arc"
 
 # Prepare adding custom PATH by first clearing out any that have been set
 # before.
 set -U fish_user_paths
 # Prepend my locally built Vim directory to my PATH.
-set -U fish_user_paths ~/local/Source/modocache/vim/install/bin $fish_user_paths
+set -U fish_user_paths ~/Source/modocache/vim/install/bin $fish_user_paths
 # Prepend Homebrew 'brew' executable to my PATH.
-set -U fish_user_paths ~/local/.brew/bin $fish_user_paths
+set -U fish_user_paths ~/.brew/bin $fish_user_paths
 
 # Append my locally built LLVM bin directory to my PATH. This keeps
 # 'which clang' pointing to macOS's '/usr/bin/clang', but extra tools like
 # 'which clang-format' point to the one in this directory.
+<<<<<<< Updated upstream
 set PATH $PATH ~/local/Source/llvm/git/system/install/bin
+=======
+set PATH $PATH ~/Source/llvm/git/system/install/bin
+
+
+# Prepare ssh-agent at the beginning of each session.
+eval (ssh-agent -c)
+>>>>>>> Stashed changes
