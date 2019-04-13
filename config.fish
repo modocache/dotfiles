@@ -232,6 +232,12 @@ function fish_prompt
 end
 
 
+function sshcopy -d "Copy text to the SSH client using pbcopy"
+  set -l client_ip (command echo -n $SSH_CLIENT | head -n1 | awk '{print $1;}')
+  ssh $client_ip pbcopy
+end
+
+
 # Set up an alias for using upstream Arcanist. I can't use its 'arc' directly
 # because that conflicts with the 'arc' executable that's vended to Facebook
 # engineers.
@@ -248,12 +254,8 @@ set -U fish_user_paths ~/.brew/bin $fish_user_paths
 # Append my locally built LLVM bin directory to my PATH. This keeps
 # 'which clang' pointing to macOS's '/usr/bin/clang', but extra tools like
 # 'which clang-format' point to the one in this directory.
-<<<<<<< Updated upstream
-set PATH $PATH ~/local/Source/llvm/git/system/install/bin
-=======
 set PATH $PATH ~/Source/llvm/git/system/install/bin
 
 
 # Prepare ssh-agent at the beginning of each session.
-eval (ssh-agent -c)
->>>>>>> Stashed changes
+eval (ssh-agent -c) > /dev/null
