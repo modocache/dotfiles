@@ -160,6 +160,7 @@ set number  " Display line numbers.
 syntax on  " Enable syntax highlighting.
 set nostartofline  " Don't reset cursor to the start of the line when moving.
 set cursorline  " Highlight the current line.
+set cursorcolumn  " Highlight the current column.
 set ruler  " Show the cursor position.
 set colorcolumn=81,121  " Display columns just after 80 and 120 characters.
 set laststatus=2  " Two status lines; the second one displays a file name.
