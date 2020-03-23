@@ -7,4 +7,6 @@ tags
 # Vim YouCompleteMe
 .ycm_extra_conf.py
 
+# Other
 /cl
+/examples
