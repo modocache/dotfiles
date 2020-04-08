@@ -15,7 +15,7 @@ set -g fish_color_history_current \x2d\x2dbold
 set -g fish_color_host normal
 set -g fish_color_match \x2d\x2dbackground\x3dbrblue
 set -g fish_color_normal normal
-set -g fish_color_operator bryellow
+set -g fish_color_operator A9A062
 set -g fish_color_param 4319CC
 set -g fish_color_quote 4C3499
 set -g fish_color_redirection 248E8E
@@ -217,7 +217,7 @@ function fish_prompt
     echo -n "× "
   end
 
-  set_color b2ffb2
+  set_color 799d73
   echo -n -s (date "+%m-%d-%y %H:%M:%S ")
 
   set_color $fish_color_cwd
