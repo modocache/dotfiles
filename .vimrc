@@ -8,21 +8,36 @@ scriptencoding utf-8  " this file is in utf-8
 " 1. mkdir -p ~/.vim/backups ~/.vim/swaps ~/.vim/undo
 " 2. This .vimrc requires Vundle. You may install Vundle using the following
 "    command:
-"        git clone https://github.com/VundleVim/Vundle.vim.git \
+"
+"      git clone https://github.com/VundleVim/Vundle.vim.git \
 "            ~/.vim/bundle/Vundle.vim
+"
 " 3. Open Vim and run :PluginInstall.
 " 4. Some plugins require additional setup:
-"    * Valloric/YouCompleteMe: Run the following commands:
-"                                  cd ~/.vim/bundle/YouCompleteMe
-"                                  ./install.py --clang-completer
-"                              You'll also want to copy a YouCompleteMe config
-"                              that works for my typical LLVM repository
-"                              setup (it assumes 'llvm' and 'build'
-"                              directories at the same level):
-"                                  cp \
-"                                    .ycm_extra_conf.py.llvm \
-"                                    /path/to/llvm/.ycm_extra_conf.py
-
+"    4.1. Valloric/YouCompleteMe
+"         Run the following commands:
+"
+"           cd ~/.vim/bundle/YouCompleteMe
+"           python3 ./install.py --clang-completer --ninja
+"
+"         (Last time I evaluated it, on April 8 2020, the '--clangd-completer'
+"         was slow to the point of being unusable for llvm-project.)
+"         To enable completion for any project, add a symlink to
+"         'compile_commands.json' from the root directory within which you're
+"         opening Vim. For llvm-project, that would mean:
+"
+"           cd llvm-project
+"           ln -s build/compile_commands.json compile_commands.json
+"
+" 5. It's not necessary for any of this to work, but if you wish, you may
+"    build and install Vim from source. To do so:
+"
+"      git clone https://github.com/vim/vim.git
+"      cd vim
+"      vim Makefile       # Toggle options to '--enable-python3interp', etc.
+"      make
+"      sudo make install  # To uninstall, 'sudo make uninstall'
+"
 " ---- Vundle Setup ----
 set nocompatible  " Don't emulate vi's limitations. This is also required for
                   " Vundle setup.
@@ -52,21 +67,18 @@ Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
 Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
                                  " notably C/C++/Objective-C via libclang.
-Plugin 'octol/vim-cpp-enhanced-highlight'  " Additional syntax highlighting for
-                                           " C++.
 Plugin 'rust-lang/rust.vim'  " Rust file detection and syntax highlighting.
 Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
-                                              " SIL, and .gyb files.
+                                            " SIL, and .gyb files.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
-Plugin 'https://git.llvm.org/git/llvm.git', {'rtp': 'utils/vim'}
+Plugin 'llvm/llvm-project.git', {'rtp': 'llvm/utils/vim'}
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
 
 " ---- Valloric/YouCompleteMe Setup ----
-let g:ycm_use_clangd = 0  " Use libclang, not clangd. I don't know how to pass
-                          " compile_commands.json arguments to clangd, like I
-                          " do for libclang in my .ycm_extra_conf.py.
+let g:ycm_use_clangd = 0  " Use libclang, not clangd. As I mention above,
+                          " the clangd completer is slow.
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
                                                          " preview window once
                                                          " a completion has
@@ -78,8 +90,6 @@ let g:ycm_filepath_completion_use_working_dir = 1  " Use the current working
                                                    " directory when
                                                    " autocompleting file
                                                    " paths.
-let g:ycm_confirm_extra_conf = 0  " Trust .ycm_extra_conf.py scripts in project
-                                  " roots.
 let g:ycm_enable_diagnostic_signs = 0 " Don't put any symbols into the Vim
                                       " gutter on lines that contain errors,
                                       " since that shifts the Vim panes around
