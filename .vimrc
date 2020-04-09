@@ -71,7 +71,7 @@ Plugin 'rust-lang/rust.vim'  " Rust file detection and syntax highlighting.
 Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
                                             " SIL, and .gyb files.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
-Plugin 'llvm/llvm-project.git', {'rtp': 'llvm/utils/vim'}
+Plugin 'llvm/llvm-project', {'rtp': 'llvm/utils/vim'}
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
