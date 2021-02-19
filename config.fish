@@ -2,39 +2,52 @@
 set fish_greeting
 
 
-# Configure fish shell colors.
-set -g fish_color_autosuggestion 7596E4
-set -g fish_color_command 164CC9
-set -g fish_color_comment 007B7B
-set -g fish_color_cwd blue
-set -g fish_color_cwd_root red
-set -g fish_color_end 02BDBD
-set -g fish_color_error 9177E5
-set -g fish_color_escape bryellow\x1e\x2d\x2dbold
-set -g fish_color_history_current \x2d\x2dbold
-set -g fish_color_host normal
-set -g fish_color_match \x2d\x2dbackground\x3dbrblue
-set -g fish_color_normal normal
-set -g fish_color_operator A9A062
-set -g fish_color_param 4319CC
-set -g fish_color_quote 4C3499
-set -g fish_color_redirection 248E8E
-set -g fish_color_search_match bryellow\x1e\x2d\x2dbackground\x3dbrblack
-set -g fish_color_selection white\x1e\x2d\x2dbold\x1e\x2d\x2dbackground\x3dbrblack
-set -g fish_color_status red
-set -g fish_color_user brgreen
-set -g fish_color_valid_path
-set -g fish_pager_color_completion \x1d
-set -g fish_pager_color_description B3A06D\x1eyellow
-set -g fish_pager_color_prefix white\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
-set -g fish_pager_color_progress brwhite\x1e\x2d\x2dbackground\x3dcyan
+# Set color and environment variables for both 'light' and 'dark' modes.
+# For example, these functions set the 'COLORFGBG' environment variable,
+# which Vim reads in order to automatically set its 'background' property
+# to 'light' or 'dark'.
+function light_mode -d "Set variables for light backgrounds"
+  # '0;15' means dark text on a light background; i.e.: "light mode".
+  set -Ux COLORFGBG "0;15"
 
-# Used by the VCS prompts below.
-set -g vcs_modified_and_untracked_color 0896ce
+  set -g fish_color_autosuggestion 878787
+  set -g fish_color_command 0F4D73 --bold
+  set -g fish_color_comment 878787
+  set -g fish_color_cwd 000000
+  set -g fish_color_end D70087
+  set -g fish_color_error D70000
+  set -g fish_color_operator 0087AF
+  set -g fish_color_param 0F4D73
+  set -g fish_color_quote 4F7704
+  set -g fish_color_redirection D75F00
 
+  set -g date_color 878787
+  set -g vcs_clean_color 197A0C
+  set -g vcs_modified_color CB4D09
+  set -g vcs_untracked_color $fish_color_error
+  set -g vcs_modified_and_untracked_color 0F4B9F
+end
 
-function prompt_hg -d "Display the current Mercurial status"
-  # TODO
+function dark_mode -d "Set variables for dark backgrounds"
+  # '15;0' means light text on a dark background; i.e.: "dark mode".
+  set -Ux COLORFGBG "15;0"
+
+  set -g fish_color_autosuggestion 5F8787
+  set -g fish_color_command AFD700 --bold
+  set -g fish_color_comment 6D6D6D
+  set -g fish_color_cwd D0D0D0
+  set -g fish_color_end AF87D7
+  set -g fish_color_error AF005F
+  set -g fish_color_operator 5FAFD7
+  set -g fish_color_param AFD700
+  set -g fish_color_quote D7AF5F
+  set -g fish_color_redirection FF5FAF
+
+  set -g date_color 808080
+  set -g vcs_clean_color 5FAF00
+  set -g vcs_modified_color FFAF00
+  set -g vcs_untracked_color $fish_color_error
+  set -g vcs_modified_and_untracked_color 0F4B9F
 end
 
 
@@ -48,23 +61,23 @@ function prompt_git -d "Display the current Git status"
     # Set the text color based on the dirtiness of the repository.
     if test -z "$stat"
       # Nothing modified.
-      set_color green
+      set_color $vcs_clean_color
     else
       # There must be staged or unstaged changes, or untracked files.
       if test -z "$staged"
         # Nothing staged.
         if test -z "$unstaged"
           # Nothing staged or unstaged, there must be untracked files.
-          set_color red
+          set_color $vcs_untracked_color
         else
           # No staged, only unstaged changes.
-          set_color yellow
+          set_color $vcs_modified_color
         end
       else
         # Staged changes.
         if test -z "$unstaged"
           # Only staged changes, no unstaged.
-          set_color yellow
+          set_color $vcs_modified_color
         else
           # Staged and unstaged changes.
           set_color $vcs_modified_and_untracked_color
@@ -104,6 +117,11 @@ function prompt_git -d "Display the current Git status"
 
     echo -n ")"
   end
+end
+
+
+function prompt_hg -d "Display the current Mercurial status"
+  # TODO
 end
 
 
@@ -152,7 +170,7 @@ function prompt_svn -d "Display the current Subversion status"
     # Set an appropriate color based on status.
     if test -z "$stat"
       # No tracked or untracked changes.
-      set_color green
+      set_color $vcs_clean_color
     else
       # There are some tracked or untracked changes.
       if test -z "$modified"
@@ -160,16 +178,16 @@ function prompt_svn -d "Display the current Subversion status"
         if test -z "$untracked"
           # There are no tracked or untracked changes, and yet 'svn status'
           # had output? Something is wrong.
-          set_color red
+          set_color $fish_color_error
         else
           # There are no tracked changes, but there are untracked changes.
-          set_color red
+          set_color $vcs_untracked_color
         end
       else
         # There are tracked changes.
         if test -z "$untracked"
           # Only tracked changes, no untracked ones.
-          set_color yellow
+          set_color $vcs_modified_color
         else
           # There are tracked and untracked changes.
           set_color $vcs_modified_and_untracked_color
@@ -212,12 +230,24 @@ end
 
 
 function fish_prompt
-  if [ $status -ne 0 ]
-    set_color red
+  # Preserve status before setting light or dark mode.
+  set -l code $status
+
+  # Use 'light' or 'dark' mode settings based on the current time.
+  set -l hour (command date "+%H")
+  if test $hour -ge 6; and test $hour -lt 17
+    light_mode
+  else
+    dark_mode
+  end
+
+  # Print an 'x' if the previous status was nonzero.
+  if [ $code -ne 0 ]
+    set_color $fish_color_error
     echo -n "× "
   end
 
-  set_color 799d73
+  set_color $date_color
   echo -n -s (date "+%m-%d-%y %H:%M:%S ")
 
   set_color $fish_color_cwd
@@ -227,35 +257,9 @@ function fish_prompt
   type -q git; and prompt_git
   type -q svn; and prompt_svn
 
-  set_color $fish_color_command
+  set_color $fish_color_param
   echo " > "
 end
 
-
-function sshcopy -d "Copy text to the SSH client using pbcopy"
-  set -l client_ip (command echo -n $SSH_CLIENT | head -n1 | awk '{print $1;}')
-  ssh $client_ip pbcopy
-end
-
-
-# Set up an alias for using upstream Arcanist. I can't use its 'arc' directly
-# because that conflicts with the 'arc' executable that's vended to Facebook
-# engineers.
-alias llvm-arc "~/Source/llvm/utils/arcanist/bin/arc"
-
-# Prepare adding custom PATH by first clearing out any that have been set
-# before.
-set -U fish_user_paths
-# Prepend my locally built Vim directory to my PATH.
-set -U fish_user_paths ~/Source/modocache/vim/install/bin $fish_user_paths
-# Prepend Homebrew 'brew' executable to my PATH.
-set -U fish_user_paths ~/.brew/bin $fish_user_paths
-
-# Append my locally built LLVM bin directory to my PATH. This keeps
-# 'which clang' pointing to macOS's '/usr/bin/clang', but extra tools like
-# 'which clang-format' point to the one in this directory.
-set PATH $PATH ~/Source/llvm/git/system/install/bin
-
-
-# Prepare ssh-agent at the beginning of each session.
-eval (ssh-agent -c) > /dev/null
+# Load host-specific fish configuration file.
+source ~/.config/fish/config.local.fish

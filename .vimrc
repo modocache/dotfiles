@@ -50,10 +50,6 @@ set rtp+=~/.vim/bundle/Vundle.vim  " Include Vundle in the runtime path.
 call vundle#begin('~/.vim/bundle')  " Initialize Vundle.
 
 Plugin 'gmarik/Vundle.vim'  " This plugin is required by Vundle itself.
-Plugin 'flazz/vim-colorschemes'  " Includes the CandyPaper color scheme, but for
-                                 " some reason this theme looks better than
-                                 " when I include dfxyz/CandyPaper.vim
-                                 " directly.
 Plugin 'ctrlpvim/ctrlp.vim.git'  " Fuzzy finder.
 Plugin 'FelikZ/ctrlp-py-matcher'  " The default matcher in ctrlp.vim is
                                   " god awful. 'opt.cpp' doesn't find the file
@@ -63,11 +59,12 @@ Plugin 'scrooloose/nerdtree'  " Tree explorer.
 Plugin 'tpope/vim-fugitive'  " Git integration.
 Plugin 'tomtom/tcomment_vim'  " Comment out blocks of code.
 Plugin 'majutsushi/tagbar'  " Displays tags in a file in the sidebar.
+Plugin 'NLKNguyen/papercolor-theme'  " The color scheme I prefer. Supports both
+                                     " light and dark backgrounds.
 Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
 Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
                                  " notably C/C++/Objective-C via libclang.
-Plugin 'rust-lang/rust.vim'  " Rust file detection and syntax highlighting.
 Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
                                             " SIL, and .gyb files.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
@@ -110,12 +107,14 @@ let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
 " ---- ctrlpvim/ctrlp.vim.git Setup ----
 " Use a reasonable matcher function.
 let g:ctrlp_match_func = {'match' : 'pymatcher#PyMatch' }
-" Normally use a VCS to list files -- except when in an LLVM directory, which
-" contains nested Git respositories. In that case, I want to search from all
-" files in each of the nested repositories -- but exclude the build directory.
+" Normally use a VCS to list files -- except when in an llvm-project directory
+" (which normally contains a directory 'mlir'), which may contain nested Git
+" respositories which I would also like included in searches. For that case, use
+" 'find' to list the files in each of the nested repositories, but exclude the
+" '.git' and 'build' directories.
 let g:ctrlp_user_command = {
   \ 'types': {
-    \ 1: ['LLVMBuild.txt', 'find %s -type f -not -path "*.git/*" -not -path "*build/*"'],
+    \ 1: ['mlir', 'find %s -type f -not -path "*.git/*" -not -path "*build/*"'],
     \ 2: ['.git', 'cd %s && git ls-files'],
     \ 3: ['.hg', 'hg --cwd %s locate -I .'],
     \ },
@@ -154,17 +153,19 @@ map <leader>[ :YcmCompleter GetType<CR>  " \[ echoes the type of the text under
 map <leader>' :YcmCompleter GetParent<CR>  " \' echoes the parent context of the
                                            " text under the cursor (i.e.: the
                                            " name of the method it's in).
+map <leader>} :LspDefinition<CR> " \} opens the definition when using LSP.
+map <leader>{ :LspHover<CR> " \{ displays information about the item under
+                            " the cursor.
 
-let g:clang_format_path = "/Users/modocache/Source/llvm/git/system/install/bin/clang-format"
-map <leader>f :pyf ~/Source/llvm/git/system/llvm/tools/clang/tools/clang-format/clang-format.py<CR>
+" \f uses clang-format on the line or selection.
+let g:clang_format_path = "/home/modocache/src/system/llvm/install/bin/clang-format"
+map <leader>f :py3f ~/src/llvm/llvm-project/clang/tools/clang-format/clang-format.py<CR>
 
 " ---- General Setup ----
 set encoding=utf-8  " Default encoding should always be UTF-8.
 set mouse=a  " Enable the mouse in all modes.
 set t_Co=256  " Use 256 colors.
-set background=light  " Use a light theme.
-colorscheme PaperColor  " This color scheme is included in
-                    " flazz/vim-colorschemes.
+colorscheme PaperColor  " Enable the PaperColor scheme.
 set hlsearch  " Highlight searches.
               " FIXME: Use the Gary Bernhardt trick to remove highlight after
               "        hitting the enter key.
@@ -217,4 +218,3 @@ au BufRead,BufNewFile *.md set filetype=markdown  " Markdown doesnt seem to be
 
 " ---- Python Setup ----
 au Filetype python setl et ts=4 sw=4
-
