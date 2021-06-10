@@ -18,7 +18,7 @@ scriptencoding utf-8  " this file is in utf-8
 "         Run the following commands:
 "
 "           cd ~/.vim/bundle/YouCompleteMe
-"           python3 ./install.py --clang-completer --ninja
+"           python3 ./install.py --clang-completer --rust-completer
 "
 "         (Last time I evaluated it, on April 8 2020, the '--clangd-completer'
 "         was slow to the point of being unusable for llvm-project.)
@@ -65,6 +65,7 @@ Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
                                    " ctags.
 Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
                                  " notably C/C++/Objective-C via libclang.
+Plugin 'rust-lang/rust.vim' " Rust file detection and syntax highlighting.
 Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
                                             " SIL, and .gyb files.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
@@ -89,6 +90,8 @@ let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
 let g:ycm_autoclose_preview_window_after_insertion = 1  " Auto-close the
                                                         " preview window when
                                                         " exiting insert mode.
+let g:ycm_confirm_extra_conf = 0  " I make use of '.ycm_extra_conf.py' and I
+                                  " prefer not to confirm each time I load it.
 let g:ycm_filepath_completion_use_working_dir = 1  " Use the current working
                                                    " directory when
                                                    " autocompleting file
