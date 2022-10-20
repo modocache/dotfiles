@@ -66,16 +66,8 @@ Plugin 'vim-scripts/TagHighlight'  " Enhanced syntax highlighting by parsing
 Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
                                  " notably C/C++/Objective-C via libclang.
 Plugin 'rust-lang/rust.vim' " Rust file detection and syntax highlighting.
-Plugin 'apple/swift', {'rtp': 'utils/vim'}  " Syntax highlighting for Swift,
-                                            " SIL, and .gyb files.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
 Plugin 'llvm/llvm-project', {'rtp': 'llvm/utils/vim'}
-" Syntax highlighting for MLIR *.mlir files.
-" FIXME: I don't know of a better way to trick Vundle into looking at both
-"        'llvm-project/llvm/utils/vim' *and* 'llvm-project/mlir/utils/vim',
-"        which is why I download two copies of llvm-project and name this one
-"        'mlir'.
-Plugin 'llvm/llvm-project', {'name': 'mlir', 'rtp': 'mlir/utils/vim'}
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
@@ -100,6 +92,7 @@ let g:ycm_enable_diagnostic_signs = 0 " Don't put any symbols into the Vim
                                       " gutter on lines that contain errors,
                                       " since that shifts the Vim panes around
                                       " in a way I don't like.
+let g:ycm_rust_toolchain_root = '/home/modocache/.rustup/toolchains/nightly-x86_64-unknown-linux-gnu/'
 " let g:ycm_server_use_vim_stdout = 1   " Uncomment these two settings
 " let g:ycm_server_log_level = 'debug'  " to debug.
 
@@ -134,9 +127,6 @@ let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:5,results:5'
 
 " ---- tpope/vim-fugitive Setup ----
 autocmd QuickFixCmdPost *grep* cwindow
-
-" ---- octol/vim-cpp-enhanced-highlight Setup ----
-let g:cpp_class_scope_highlight = 1
 
 " ---- Terminal Setup ----
 if (&term =~ "xterm") && (&termencoding == "")
@@ -210,14 +200,30 @@ endif
 " ---- Window Size Setup ----
 set winwidth=84      " Set a normal width of 84 columns...
 set winminwidth=15   " ...with a minimum of 15 columns.
-set winheight=5     " We have to have a winheight bigger than we want to set
-set winminheight=5  " winminheight. But if we set winheight to be huge before
+set winheight=5      " We have to have a winheight bigger than we want to set
+set winminheight=5   " winminheight. But if we set winheight to be huge before
 set winheight=999    " winminheight, the winminheight set will fail.
 
-" ---- Markdown Setup ----
-au BufRead,BufNewFile *.md set filetype=markdown  " Markdown doesnt seem to be
-                                                  " the default for .md files,
-                                                  " so explicitly set it.
+" ---- Automatic Commands ----
+" Set the background based on the current system time.
+function! UpdateBackground()
+  if strftime("%H") >= 7 && strftime("%H") < 16
+    set background=light
+  else
+    set background=dark
+  endif
+endfunction
 
-" ---- Python Setup ----
-au Filetype python setl et ts=4 sw=4
+augroup vimrc
+  " Delete all previously defined au[tocmd] in this aug[roup].
+  autocmd!
+  " Markdown doesnt seem to be the default for .md files, so explicitly set it.
+  autocmd BufRead,BufNewFile *.md set filetype=markdown
+  " Use 4 spaces for indentation in Python.
+  autocmd Filetype python setl et ts=4 sw=4
+  " When any of these events occur, in any file `*`, call the function to
+  " update the background to either light or dark based on the current time.
+  autocmd CursorMoved,CursorHold,CursorHoldI,WinEnter,WinLeave,FocusLost,
+          \FocusGained,VimResized,ShellCmdPost * call UpdateBackground()
+augroup end
+

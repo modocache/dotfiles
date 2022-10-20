@@ -10,8 +10,7 @@ def Settings(**kwargs):
     return {
         "ls": {
             "linkedProjects": [
-                os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                             'Cargo.toml')
+                os.path.join(os.path.dirname(__file__), 'Cargo.toml')
             ]
         },
     }

@@ -6,3 +6,5 @@
 	editor = vim
 [grep]
 	lineNumber = true
+[init]
+	defaultBranch = main

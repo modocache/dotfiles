@@ -235,14 +235,14 @@ function fish_prompt
 
   # Use 'light' or 'dark' mode settings based on the current time.
   set -l hour (command date "+%H")
-  if test $hour -ge 6; and test $hour -lt 17
+  if test $hour -ge 7; and test $hour -lt 16
     light_mode
   else
     dark_mode
   end
 
   # Print an 'x' if the previous status was nonzero.
-  if [ $code -ne 0 ]
+  if test $code -ne 0
     set_color $fish_color_error
     echo -n "× "
   end
