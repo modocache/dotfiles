@@ -223,7 +223,7 @@ augroup vimrc
   autocmd Filetype python setl et ts=4 sw=4
   " When any of these events occur, in any file `*`, call the function to
   " update the background to either light or dark based on the current time.
-  autocmd CursorMoved,CursorHold,CursorHoldI,WinEnter,WinLeave,FocusLost,
-          \FocusGained,VimResized,ShellCmdPost * call UpdateBackground()
+  autocmd CursorHold,CursorHoldI,WinEnter,WinLeave,FocusLost,FocusGained,
+          \VimResized,ShellCmdPost * call UpdateBackground()
 augroup end
 
