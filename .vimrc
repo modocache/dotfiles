@@ -213,6 +213,8 @@ function! UpdateBackground()
     set background=dark
   endif
 endfunction
+" Update the background as soon as Vim starts.
+call UpdateBackground()
 
 augroup vimrc
   " Delete all previously defined au[tocmd] in this aug[roup].
