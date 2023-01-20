@@ -68,6 +68,12 @@ Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
 Plugin 'rust-lang/rust.vim' " Rust file detection and syntax highlighting.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
 Plugin 'llvm/llvm-project', {'rtp': 'llvm/utils/vim'}
+" Syntax highlighting for MLIR *.mlir files.
+" FIXME: I don't know of a better way to trick Vundle into looking at both
+"        'llvm-project/llvm/utils/vim' *and* 'llvm-project/mlir/utils/vim',
+"        which is why I download two copies of llvm-project and name this one
+"        'mlir'.
+Plugin 'modocache/llvm-project', {'name': 'mlir', 'rtp': 'mlir/utils/vim'}
 
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
