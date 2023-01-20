@@ -261,5 +261,10 @@ function fish_prompt
   echo " > "
 end
 
+
+# Set environment variables.
+set -Ux EDITOR (which vim)
+
+
 # Load host-specific fish configuration file.
 source ~/.config/fish/config.local.fish
