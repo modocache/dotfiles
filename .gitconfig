@@ -1,5 +1,5 @@
 [user]
-	email = modocache@gmail.com
+	email = brian@modocache.io
 	name = Brian Gesiak
 [core]
 	excludesfile = ~/.gitignore
