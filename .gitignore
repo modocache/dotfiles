@@ -1,14 +1,9 @@
-# macOS
+# macOS creates a file named `.DS_Store` in directories, for its own internal
+# bookkeeping. It's host OS-specific and so should never be committed.
 .DS_Store
 
-# Ctags
-tags
-
-# Vim YouCompleteMe
-.ycm_extra_conf.py
+# My workflow for using the Vim plugin YouCompleteMe is to symlink a build
+# artifact named `compile_commands.json` into the root directory of the Git
+# project, where YCM looks for it by default. This file is a build artifact and
+# so should never be committed.
 /compile_commands.json
-
-# Other
-/cl
-/examples
-/mdc

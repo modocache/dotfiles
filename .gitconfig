@@ -1,10 +1,40 @@
+# Git configuration
+# =================
+#
+# To use this configuration, I symlink it to my home directory:
+# ```
+# ln -s (pwd)/.gitconfig  ~/.gitconfig
+# ```
 [user]
-	email = brian@modocache.io
-	name = Brian Gesiak
+  name = Brian Gesiak
+  email = brian@modocache.io
+
 [core]
-	excludesfile = ~/.gitignore
-	editor = vim
+  # In cases where Git opens a text editor (such as for an interactive rebase
+  # with `git rebase -i`), have it open Vim.
+  editor = vim
+  # To ignore certain files across this entire host, I create a file at this
+  # path and fill it with paths (relative to a Git repository root) to ignore.
+  # To get started, I copy the `.gitignore` from this repository:
+  # ```
+  # mkdir -p ~/.config/git; and cp (pwd)/.gitignore ~/.config/git/
+  # ```
+  excludesfile = ~/.config/git/.gitignore
+
 [grep]
-	lineNumber = true
-[init]
-	defaultBranch = main
+  # Run every `git grep` as if `-n` or `--line-number` were specified (i.e. the
+  # line number of each match appears after the filename).
+  lineNumber = true
+
+[include]
+  # Git supports including other files.
+  # For any host-specific settings, I create a file at this path and fill it
+  # with settings like the ones in this file. Settings may also be overridden,
+  # so I can choose to use a different `user.email` setting on each machine,
+  # for example.
+  path = ~/.config/git/local.gitconfig
+
+[includeIf "gitdir:llvm-project/"]
+  # Git also supports conditional includes: the following file is only read
+  # within a repository named `llvm-project`.
+  path = "~/.config/git/llvm-project.gitconfig"
