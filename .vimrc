@@ -171,6 +171,7 @@ set hlsearch  " Highlight searches.
 set incsearch  " Highlight matches incrementally as pattern is typed.
 highlight Search cterm=NONE ctermfg=grey ctermbg=blue
 highlight IncSearch cterm=NONE ctermfg=grey ctermbg=blue
+set nowrapscan " Don't wrap around the end of buffer content when searching.
 set nowrap  " Never wrap lines.
 set number  " Display line numbers.
 syntax on  " Enable syntax highlighting.
