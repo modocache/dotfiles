@@ -77,13 +77,14 @@ end
 
 function prompt_git -d "Display the current Git status"
   if command git rev-parse --is-inside-work-tree >/dev/null 2>&1
-    set -l stat (command git status --porcelain 2>/dev/null)
     set -l staged (command git diff --staged 2>/dev/null)
     set -l unstaged (command git diff 2>/dev/null)
     set -l untracked (command git ls-files . --exclude-standard --others 2>/dev/null)
 
-    # Set the text color based on the dirtiness of the repository.
-    if test -z "$stat"
+    # # Set the text color based on the dirtiness of the repository.
+    if test -z "$staged"
+      and test -z "$unstaged"
+      and test -z "$untracked"
       # Nothing modified.
       set_color $vcs_clean_color
     else
@@ -127,16 +128,14 @@ function prompt_git -d "Display the current Git status"
     # Display a series of characters after the revision indicating the dirtiness
     # of the repository -- for when copy-pasting output from commands run in
     # dirty repositories.
-    if test -n "$stat"
-      if test -n "$staged"
-        echo -n "+"
-      end
-      if test -n "$unstaged"
-        echo -n "*"
-      end
-      if test -n "$untracked"
-        echo -n "?"
-      end
+    if test -n "$staged"
+      echo -n "+"
+    end
+    if test -n "$unstaged"
+      echo -n "*"
+    end
+    if test -n "$untracked"
+      echo -n "?"
     end
 
     echo -n ")"
