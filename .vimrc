@@ -187,6 +187,7 @@ call vundle#begin('~/.vim/bundle')  " Initialize Vundle.
 
 Plugin 'gmarik/Vundle.vim'  " This plugin is required by Vundle itself.
 Plugin 'ctrlpvim/ctrlp.vim.git'  " Fuzzy finder.
+Plugin 'dag/vim-fish' " Syntax highlighting and more for `.fish` files.
 Plugin 'FelikZ/ctrlp-py-matcher'  " The default matcher in ctrlp.vim is
                                   " god awful. 'opt.cpp' doesn't find the file
                                   " 'tools/opt/opt.cpp'...?! Replace it with
