@@ -1,17 +1,26 @@
-# Use `brew install fish` to install [fish](https://fishshell.com).
+# fish
+# ====
 #
-# To make `fish` the default shell, add `/usr/bin/fish` to `/etc/shells`,
-# then run the following command:
+# Fish is a command line shell that (out of the box) provides useful features
+# like completion suggestions and quick search of prior commands.
 #
-# ```
-# $ chsh -s `which fish`
-# ```
+# Installation
+# ------------
 #
-# To set up the prompt I like, symlink it into your `fish` config:
+# Many package managers include fish, so it can be installed with
+# `apt install fish` or similar commands. It can also be installed via installer
+# software, available at https://fishshell.com.
 #
-# ```
+# To make `fish` the default shell, add the absolute path to the newly installed
+# `fish` executable to `/etc/shells`, then run `chsh -s /path/to/fish`.
+#
+# To use this configuration file, symlink it to `.config/fish/config.fish`, like
+# so:
+#
+# ```bash
 # $ ln -s `pwd`/config.fish  ~/.config/fish/config.fish
 # ```
+
 
 # Disable fish greeting.
 set fish_greeting
