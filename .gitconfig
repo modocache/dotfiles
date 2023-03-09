@@ -26,6 +26,25 @@
   # line number of each match appears after the filename).
   lineNumber = true
 
+[bash]
+  # The Git repository contains a bash and zsh prompt shellscript that displays
+  # repository information in a user's "PS1" ("prompt string/statement one"):
+  # https://github.com/git/git/blob/v2.39.2/contrib/completion/git-prompt.sh
+  #
+  # This script makes use of Git config values that are prefixed with `bash`:
+  # `bash.showDirtyState`, `bash.showUntrackedFiles`, and so on, in order to
+  # allow users to configure the prompt behavior per-repository.
+  #
+  # The fish shell's built-in function `fish_git_prompt` also references these
+  # configuration values:
+  # https://github.com/fish-shell/fish-shell/blob/3.6.0/doc_src/cmds/fish_git_prompt.rst
+  #
+  # The following are enabled by default, but use local configs and conditional
+  # includes (see below) to disable them per-repository.
+  showInformativeStatus = true
+  showDirtyState = true
+  showUntrackedFiles = true
+
 [include]
   # Git supports including other files.
   # For any host-specific settings, I create a file at this path and fill it
