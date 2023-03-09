@@ -84,6 +84,9 @@
 "   of the mouse in all of Vim's various "modes" (nomal, visual, insert,
 "   etc.).
 set mouse=a
+" - When moving the cursor up and down, keep it at its original column, or
+"   if not possible, at the last character in the line.
+set nostartofline
 
 " - Once a search term has been entered, continue to highlight all matches,
 "   until either a new search term is entered, or the `nohlsearch` command is
@@ -94,12 +97,44 @@ set hlsearch
 set incsearch
 " - Don't wrap around the end of buffer content when searching.
 set nowrapscan
+" - Ignore case when searching, unless the search term is prefixed with `\C`.
+set ignorecase
 
 " - Display absolute line numbers to the left of each line in the editor.
 "   (Note that relative line numbers can be displayed with `relativenumber`.)
 set number
 " - Do not wrap long lines.
 set nowrap
+" - By default, unless overridden for a specific file type,  break lines at
+"   80 characters.
+set textwidth=80
+
+" - Enable syntax highlighting.
+syntax enable
+" - Highlight the line with the cursor.
+set cursorline
+" - Highlight the column with the cursor.
+set cursorcolumn
+" - Disable cursor line and column highlighting when the cursor leaves a
+"   window, and re-enable it when the cursor enters a window.
+"   - This is possible using Vim's `autocmd`, which allows users to specify
+"     commands to be executed when certain "autocommand events" occur.
+"     The syntax is `autocmd {event} {file-pattern} {command}`.
+"   - `autocmd` can be grouped, using the `augroup` command. Groups of
+"     `autocmd` can be conveniently executed or removed.
+augroup vimrc_cursor
+  autocmd WinLeave * set nocursorline nocursorcolumn
+  autocmd WinEnter * set cursorline cursorcolumn
+augroup end
+" - Display guiding columns in each window, just after the specified
+"   `textwidth`.
+set colorcolumn=+1
+
+" - Display the line and column of the cursor in the window status line.
+set ruler
+" - This setting takes an enum value that controls whether the window status
+"   line is displayed; `2` indicates it should always be displayed.
+set laststatus=2
 
 " There are also several options that typically appear in others' vimrc, but
 " that I don't include here:
@@ -112,23 +147,19 @@ set nowrap
 "   encoding differs from Vim's `encoding` value. Conversion can fail silently
 "   for many reasons, and I don't care to enable it.
 " - `termencoding=utf-8`:
+"set t_Co=256  " Use 256 colors.
+" - Function and cursor keys send input sequences that begin with `Escape`,
+"   which is also a Vim control character. So, by default... this is redundant
+"   with nocompatible, since it's off by default in Vim mode (but on by default
+"   in vi mode).
+" set esckeys  " Allow cursor keys in insert mode.
 
 " ---- Terminal Setup ----
 "if (&term =~ "xterm") && (&termencoding == "")
 "  set termencoding=utf-8
 "endif
 " ---- General Setup ----
-set t_Co=256  " Use 256 colors.
-syntax on  " Enable syntax highlighting.
-set nostartofline  " Don't reset cursor to the start of the line when moving.
-set cursorline  " Highlight the current line.
-set cursorcolumn  " Highlight the current column.
-set ruler  " Show the cursor position.
-set colorcolumn=81,121  " Display columns just after 80 and 120 characters.
-set laststatus=2  " Two status lines; the second one displays a file name.
-set esckeys  " Allow cursor keys in insert mode.
 set backspace=indent,eol,start  " Allow backspace in insert mode.
-set ignorecase  " Ignore case when searching.
 set noerrorbells  " Disable error bells.
 set clipboard=unnamed  " Use the OS clipboard by default (on versions compiled
                        " with `+clipboard`).
@@ -204,7 +235,7 @@ Plugin 'Valloric/YouCompleteMe'  " Autocompletion for many languages, most
                                  " notably C/C++/Objective-C via libclang.
 Plugin 'rust-lang/rust.vim' " Rust file detection and syntax highlighting.
 " Syntax highlighting for LLVM *.ll and tablegen *.td files.
-Plugin 'llvm/llvm-project', {'rtp': 'llvm/utils/vim'}
+Plugin 'llvm/llvm-project', { 'rtp' : 'llvm/utils/vim' }
 " Syntax highlighting for MLIR *.mlir files.
 " FIXME: I don't know of a better way to trick Vundle into looking at both
 "        'llvm-project/llvm/utils/vim' *and* 'llvm-project/mlir/utils/vim',
@@ -295,6 +326,20 @@ map <leader>{ :LspHover<CR> " \{ displays information about the item under
 " \f uses clang-format on the line or selection.
 map <leader>f :py3f $CLANG_FORMAT_PY<CR>
 
+" Clang format on close
+" https://vi.stackexchange.com/questions/21102/how-to-clang-format-the-current-buffer-on-save
+function FormatBuffer()
+  if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
+    let cursor_pos = getpos('.')
+    silent :%!clang-format
+    call setpos('.', cursor_pos)
+  endif
+endfunction
+augroup clang_format
+  autocmd!
+  autocmd BufWritePre *.h,*.hpp,*.c,*.cpp :call FormatBuffer()
+augroup end
+
 " \/ turns off highlighting for matches of the last search pattern.
 " (Note that `nohlsearch` is not the same thing as `set nohlsearch`, which
 " would disable the option for all searches.)
@@ -312,4 +357,4 @@ colorscheme PaperColor  " Enable the PaperColor scheme.
 "highlight IncSearch cterm=NONE ctermfg=grey ctermbg=blue
 
 
-" vim: set tabstop=8 softtabstop=2 shiftwidth=2 expandtab nowrap:
+" vim: set textwidth=80 tabstop=8 softtabstop=2 shiftwidth=2 expandtab nowrap:
