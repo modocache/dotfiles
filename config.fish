@@ -117,36 +117,36 @@ function prompt_git -d "Display the current Git status"
         set_color $vcs_modified_and_untracked_color
       end
     end
-
-    echo -n " ("
-
-    # Always display the revision.
-    if test -z "$ref"
-      set ref "empty"
-    end
-    echo -n "$ref"
-
-    # Optionally display a symbolic name for the revision.
-    set -l sref (command git symbolic-ref --short HEAD 2>/dev/null)
-    if test -n "$sref"
-      echo -n " $sref"
-    end
-
-    # Display a series of characters after the revision indicating the dirtiness
-    # of the repository -- for when copy-pasting output from commands run in
-    # dirty repositories.
-    if test -n "$staged"
-      echo -n "+"
-    end
-    if test -n "$unstaged"
-      echo -n "*"
-    end
-    if test -n "$untracked"
-      echo -n "?"
-    end
-
-    echo -n ")"
   end
+
+  echo -n " ("
+
+  # Always display the revision.
+  if test -z "$ref"
+    set ref "empty"
+  end
+  echo -n "$ref"
+
+  # Optionally display a symbolic name for the revision.
+  set -l sref (command git symbolic-ref --short HEAD 2>/dev/null)
+  if test -n "$sref"
+    echo -n " $sref"
+  end
+
+  # Display a series of characters after the revision indicating the dirtiness
+  # of the repository -- for when copy-pasting output from commands run in
+  # dirty repositories.
+  if test -n "$staged"
+    echo -n "+"
+  end
+  if test -n "$unstaged"
+    echo -n "*"
+  end
+  if test -n "$untracked"
+    echo -n "?"
+  end
+
+  echo -n ")"
 end
 
 
