@@ -76,44 +76,51 @@ end
 
 
 function prompt_git -d "Display the current Git status"
-  if command git rev-parse --is-inside-work-tree >/dev/null 2>&1
-    set -l staged (command git diff --staged 2>/dev/null)
-    set -l unstaged (command git diff 2>/dev/null)
-    set -l untracked (command git ls-files . --exclude-standard --others 2>/dev/null)
+  # Check if we're in a Git repository. If not, bail.
+  set -l info (command git rev-parse --git-dir --is-inside-git-dir --is-bare-repository --is-inside-work-tree HEAD 2>/dev/null)
+  test -n "$info"
+  or return
 
-    # # Set the text color based on the dirtiness of the repository.
+  # The check returns the revision hash; store the first 8 characters for
+  # display.
+  set --query info[5]
+  and set -l ref (string shorten -m8 -c "" -- $info[5])
+
+  set -l staged (command git diff --staged 2>/dev/null)
+  set -l unstaged (command git diff 2>/dev/null)
+  set -l untracked (command git ls-files . --exclude-standard --others 2>/dev/null)
+
+  # # Set the text color based on the dirtiness of the repository.
+  if test -z "$staged"
+    and test -z "$unstaged"
+    and test -z "$untracked"
+    # Nothing modified.
+    set_color $vcs_clean_color
+  else
+    # There must be staged or unstaged changes, or untracked files.
     if test -z "$staged"
-      and test -z "$unstaged"
-      and test -z "$untracked"
-      # Nothing modified.
-      set_color $vcs_clean_color
-    else
-      # There must be staged or unstaged changes, or untracked files.
-      if test -z "$staged"
-        # Nothing staged.
-        if test -z "$unstaged"
-          # Nothing staged or unstaged, there must be untracked files.
-          set_color $vcs_untracked_color
-        else
-          # No staged, only unstaged changes.
-          set_color $vcs_modified_color
-        end
+      # Nothing staged.
+      if test -z "$unstaged"
+        # Nothing staged or unstaged, there must be untracked files.
+        set_color $vcs_untracked_color
       else
-        # Staged changes.
-        if test -z "$unstaged"
-          # Only staged changes, no unstaged.
-          set_color $vcs_modified_color
-        else
-          # Staged and unstaged changes.
-          set_color $vcs_modified_and_untracked_color
-        end
+        # No staged, only unstaged changes.
+        set_color $vcs_modified_color
+      end
+    else
+      # Staged changes.
+      if test -z "$unstaged"
+        # Only staged changes, no unstaged.
+        set_color $vcs_modified_color
+      else
+        # Staged and unstaged changes.
+        set_color $vcs_modified_and_untracked_color
       end
     end
 
     echo -n " ("
 
     # Always display the revision.
-    set -l ref (command git show-ref --head --hash --abbrev 2>/dev/null | head -n1)
     if test -z "$ref"
       set ref "empty"
     end
