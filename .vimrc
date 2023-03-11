@@ -65,7 +65,7 @@
 "      sudo make install  # To uninstall, 'sudo make uninstall'
 
 " Core configuration: commands and setting options
-" -----------------------------------
+" ------------------------------------------------
 "
 " This configuration file makes use of plugins, which can be configured using
 " global variables (more on that later). But Vim itself is configured using
@@ -76,8 +76,17 @@
 " - The `help <name>` command opens a buffer to explain most everything in Vim.
 " - For example, `help set` explains the `set` command, including the fact
 "   that `set all` can be used to print all available options.
+" - When manual entries are ambiguous, special syntax can be used to
+"   disambiguate. For example, to display help for the Vim option `backspace`,
+"   use single quotes: `help 'backspace'`. A list of all the syntaxes can be
+"   found with `help notation`.
 " - Many option names come in two flavors: `<name>` which enables the option,
 "   and `no<name>` which disables it.
+"
+" By default, the `help` command splits a window horizontally. The `vertical`
+" command can be used to run any command, and if that command splits the window,
+" it will be split vertically instead. So, `vertical help` opens the Vim
+" reference manual in a vertical split instead.
 "
 " My preferred options are as follows:
 " - Normally Vim doesn't respond to mouse events. This option enables the use
@@ -87,6 +96,15 @@ set mouse=a
 " - When moving the cursor up and down, keep it at its original column, or
 "   if not possible, at the last character in the line.
 set nostartofline
+" - `backspace` changes how the `<BS>` and `<Del>` keys, and the `Ctrl-w` and
+"   `Ctrl-u` key combinations, work in insert mode.
+"   - `eol` allows for backspacing past line breaks.
+"   - `indent` allows for backspacing past any automatic indentation that Vim
+"     inserts when entering insert mode.
+"   - `start` allows for backspacing past where the cursor began when insert
+"     mode was entered, but `Ctrl-w` (which normally deletes a word) stops once
+"     at the point where insert mode was entered.
+set backspace=eol,indent,start
 
 " - Once a search term has been entered, continue to highlight all matches,
 "   until either a new search term is entered, or the `nohlsearch` command is
@@ -122,7 +140,12 @@ set cursorcolumn
 "     The syntax is `autocmd {event} {file-pattern} {command}`.
 "   - `autocmd` can be grouped, using the `augroup` command. Groups of
 "     `autocmd` can be conveniently executed or removed.
-augroup vimrc_cursor
+"   - `autocmd!` deletes all previously defined autocommands in the current
+"     group. When a `.vimrc` is sourced twice, each autocommand adds to a list
+"     of commands, regardless of whether they're already present. So it's a
+"     good idea to clear them out.
+augroup cursor_active_window_only
+  autocmd!
   autocmd WinLeave * set nocursorline nocursorcolumn
   autocmd WinEnter * set cursorline cursorcolumn
 augroup end
@@ -135,6 +158,11 @@ set ruler
 " - This setting takes an enum value that controls whether the window status
 "   line is displayed; `2` indicates it should always be displayed.
 set laststatus=2
+
+" - Disable error "bells" (either a sound or a screen flash) in all cases,
+"   including things like when I hit <Esc> in normal mode. I disable audio
+"   and visual error bells in my terminal application settings as well.
+set belloff=all
 
 " There are also several options that typically appear in others' vimrc, but
 " that I don't include here:
@@ -159,8 +187,6 @@ set laststatus=2
 "  set termencoding=utf-8
 "endif
 " ---- General Setup ----
-set backspace=indent,eol,start  " Allow backspace in insert mode.
-set noerrorbells  " Disable error bells.
 set clipboard=unnamed  " Use the OS clipboard by default (on versions compiled
                        " with `+clipboard`).
 set wildmenu  " Enhance command-line completion.
