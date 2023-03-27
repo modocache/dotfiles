@@ -84,7 +84,7 @@ function prompt_git -d "Display the current Git status"
   # The check returns the revision hash; store the first 8 characters for
   # display.
   set --query info[5]
-  and set -l ref (string shorten -m8 -c "" -- $info[5])
+  and set -l ref (string sub --length 8 -- $info[5])
 
   set -l staged (command git diff --staged 2>/dev/null)
   set -l unstaged (command git diff 2>/dev/null)
