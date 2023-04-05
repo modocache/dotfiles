@@ -127,6 +127,21 @@ set nowrap
 " - By default, unless overridden for a specific file type,  break lines at
 "   80 characters.
 set textwidth=80
+" - Specify exactly how Vim formats text, according to the character codes
+"   explained in `help fo-table`. By default, Vim uses `tcq`, and `croql` for
+"   C/C++ files. I use the same for all files:
+"   - `c`: Auto-wrap comments using `textwidth`, inserting the current comment
+"          leader automatically. Here, "current comment leader" means "the
+"          comment opening syntax when in a comment, or nothing if not in a
+"          comment."
+"   - `l`: Long lines are not broken in insert mode.
+"   - `n`: Recognize numbered lists when formatting text.
+"   - `o`: Automatically insert the current comment leader after hitting 'o' or
+"          'O' in normal mode.
+"   - `q`: Type `gq` to format a comment.
+"   - `r`: Automatically insert the current comment leader when hitting
+"          `<Enter>` in insert mode.
+set formatoptions=clnoqr
 
 " - Enable syntax highlighting.
 syntax enable
