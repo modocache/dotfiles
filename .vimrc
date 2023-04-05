@@ -76,7 +76,8 @@
 " - The `help <name>` command opens a buffer to explain most everything in Vim.
 " - For example, `help set` explains the `set` command, including the fact
 "   that `set all` can be used to print all available options, and that
-"   `set mouse?` can be used to print the value of the `mouse` option.
+"   `set mouse?` can be used to print the value of the `mouse` option. (What's
+"   more, `verbose set mouse?` will tell you where this option was last set.)
 " - When manual entries are ambiguous, special syntax can be used to
 "   disambiguate. For example, to display help for the Vim option `backspace`,
 "   use single quotes: `help 'backspace'`. A list of all the syntaxes can be
