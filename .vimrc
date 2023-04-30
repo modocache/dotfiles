@@ -136,13 +136,12 @@ set textwidth=80
 "          comment opening syntax when in a comment, or nothing if not in a
 "          comment."
 "   - `l`: Long lines are not broken in insert mode.
-"   - `n`: Recognize numbered lists when formatting text.
 "   - `o`: Automatically insert the current comment leader after hitting 'o' or
 "          'O' in normal mode.
 "   - `q`: Type `gq` to format a comment.
 "   - `r`: Automatically insert the current comment leader when hitting
 "          `<Enter>` in insert mode.
-set formatoptions=clnoqr
+set formatoptions=cloqr
 
 " - Enable syntax highlighting.
 syntax enable
