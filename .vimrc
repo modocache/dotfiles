@@ -230,7 +230,7 @@ set winheight=999    " winminheight, the winminheight set will fail.
 " ---- Automatic Commands ----
 " Set the background based on the current system time.
 function! UpdateBackground()
-  if strftime("%H") >= 7 && strftime("%H") < 16
+  if strftime("%H") >= 7 && strftime("%H") < 19
     set background=light
   else
     set background=dark
