@@ -21,6 +21,11 @@
   # ```
   excludesfile = ~/.config/git/.gitignore
 
+[init]
+  # When initializing a new repository with `git init`, use a default branch
+  # name 'main'.
+  defaultBranch = main
+
 [grep]
   # Run every `git grep` as if `-n` or `--line-number` were specified (i.e. the
   # line number of each match appears after the filename).
