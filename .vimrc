@@ -368,18 +368,44 @@ map <leader>{ :LspHover<CR> " \{ displays information about the item under
 " \f uses clang-format on the line or selection.
 map <leader>f :py3f $CLANG_FORMAT_PY<CR>
 
-" Clang format on close
-" https://vi.stackexchange.com/questions/21102/how-to-clang-format-the-current-buffer-on-save
-function FormatBuffer()
-  if &modified && !empty(findfile('.clang-format', expand('%:p:h') . ';'))
-    let cursor_pos = getpos('.')
-    silent :%!clang-format
-    call setpos('.', cursor_pos)
+" Define a function that runs `clang-format` on the difference between the
+" entire buffer and what's on disk, so that Vim can call it before writing a
+" buffer (`BufWritePre`). This function is adapted from the LLVM project's
+" `clang-format` documentation:
+" https://clang.llvm.org/docs/ClangFormat.html#vim-integration
+function ClangFormatBuffer()
+  " Since this function is called whenever a buffer is about to be written for a
+  " C/C++ file, we really don't want it to fail, since that would make it a huge
+  " pain to edit those files. So, check that `$CLANG_FORMAT_PY` points to a
+  " valid file using `filereadable`, and bail if that environment variable
+  " hasn't set that up yet.
+  "
+  " Also, this behavior is fairly intrusive, so only perform the formatting when
+  " modifying paths in a project that has a `.clang-format` file. To do so, use:
+  " - `expand`, which expands a string with special keywords. Here, `%` refers
+  "   to the current file, `:p` is a modifier that expands that file to its full
+  "   path, and `:h` removes the last component of the path (the file name). As
+  "   a result, this becomes a string representing the path to the directory
+  "   that contains the buffer being written.
+  " - `findfile`, which searches for a file with the given name, starting from
+  "   the given directory. If its string argument for the directory to start
+  "   from ends with a `;`, then it searches recursively upward. Here, we use
+  "   the `.` operator to concatenate the result from `expand` with the
+  "   character `;`.
+  if !filereadable($CLANG_FORMAT_PY) ||
+        \ empty(findfile('.clang-format', expand('%:p:h') . ';'))
+    return
   endif
+
+  " Assuming we got this far, invoke `clang-format.py`. When `l:formatdiff=1` is
+  " set, it is run on all files that differ between the buffer and what's on
+  " disk (if there is a disk representation).
+  let l:formatdiff = 1
+  py3f $CLANG_FORMAT_PY
 endfunction
 augroup clang_format
   autocmd!
-  autocmd BufWritePre *.h,*.hpp,*.c,*.cpp :call FormatBuffer()
+  autocmd BufWritePre *.h,*.hpp,*.c,*.cc,*.cpp :call ClangFormatBuffer()
 augroup end
 
 " \/ turns off highlighting for matches of the last search pattern.
