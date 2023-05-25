@@ -20,6 +20,12 @@
 # ```bash
 # $ ln -s `pwd`/config.fish  ~/.config/fish/config.fish
 # ```
+#
+# Then, create a file for settings specific to the host machine:
+#
+# ```bash
+# $ touch ~/.config/fish/config.local.fish
+# ```
 
 
 # Disable fish greeting.
