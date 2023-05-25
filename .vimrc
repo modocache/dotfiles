@@ -51,8 +51,8 @@
 "         fish_add_path $HOME/path/to/llvm-project/build/bin
 "         # Export the $CLANG_FORMAT_PY environment variable:
 "         set -Ux CLANG_FORMAT_PY \
-"           "$HOME/path/to/llvm-project/" \
-"           "clang/tools/clang-format/clang-format.py"
+"           (string join / $HOME path to llvm-project \
+"            clang tools clang-format clang-format.py)
 "
 " 6. Configure Vim settings specific to the current host machine by creating a
 "    file at `~/.vim/local.vimrc`.
