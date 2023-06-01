@@ -95,6 +95,15 @@
 "   of the mouse in all of Vim's various "modes" (nomal, visual, insert,
 "   etc.).
 set mouse=a
+" - Disable error "bells" (either a sound or a screen flash) in all cases,
+"   including things like when I hit <Esc> in normal mode. I disable audio
+"   and visual error bells in my terminal application settings as well.
+set belloff=all
+" - Vim displays messages in response to various events. Many of these can be
+"   configured with flags passed to the `shortmess` option:
+"   - `I`: Don't display an intro message when starting Vim.
+set shortmess=I
+
 " - When moving the cursor up and down, keep it at its original column, or
 "   if not possible, at the last character in the line.
 set nostartofline
@@ -175,10 +184,24 @@ set ruler
 "   line is displayed; `2` indicates it should always be displayed.
 set laststatus=2
 
-" - Disable error "bells" (either a sound or a screen flash) in all cases,
-"   including things like when I hit <Esc> in normal mode. I disable audio
-"   and visual error bells in my terminal application settings as well.
-set belloff=all
+" - In `list` mode, Vim displays special characters that represent things like
+"   the end of a line or a tab. `listchars` can be used to configure what's
+"   represented by which charactets.
+set list
+" - `listchars` is a comma-separated sequence of "invisible concept,"
+"   colon, and then the character to display to represent that invisible
+"   concept.
+"   - `eol`: Used to represent the end of a line.
+"   - `extends`: Character to show in the last column of a line that extends
+"                past the right edge of the screen (when `nowrap` is set).
+"   - `nbsp`: Used for non-breakable space characters, like `U+202F`.
+"   - `precedes`: Shown in the first column of a line that extends past the left
+"                 edge of the screen (when `nowrap` is set).
+"   - `tab`: Used for tabs. The first character is always displayed, then the
+"            second character (here a space, which must be escaped) is inserted
+"            as many times as fits within a tab.
+"   - `trail`: Used for trailing spaces.
+set listchars=eol:¬,extends:>,nbsp:▝,precedes:<,tab:▸\ ,trail:▝
 
 " There are also several options that typically appear in others' vimrc, but
 " that I don't include here:
@@ -203,17 +226,9 @@ set belloff=all
 "  set termencoding=utf-8
 "endif
 " ---- General Setup ----
-set clipboard=unnamed  " Use the OS clipboard by default (on versions compiled
-                       " with `+clipboard`).
 set wildmenu  " Enhance command-line completion.
 set ttyfast  " Use advanced tty features for smoother drawing.
-set shortmess=I  " Don’t show the intro message when starting Vim.
-set title  " Show the filename in the window titlebar.
-set showcmd  " Show the (partial) command as it’s being typed.
 set expandtab  " Use spaces when hitting tab.
-set list  " Show invisible characters...
-set listchars=tab:▸\ ,trail:▝,eol:¬  " ...but only show tabs and trailing
-                                     " whitespace.
 set shiftwidth=2  " By default, use two spaces to indent.
 set tabstop=2  " By default, tabs are represented by two spaces.
 set backupdir=~/.vim/backups  " Place backups, swap files, and undo
