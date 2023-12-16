@@ -1,1 +1,1 @@
-command script import ~/Source/system/dotfiles/lldb_sshcopy.py
+settings set frame-format "${ansi.fg.green}frame #${frame.index}${ansi.normal}{ ${ansi.fg.cyan}${line.file.basename}${ansi.normal}:${ansi.fg.yellow}${line.number}${ansi.normal}{:${ansi.fg.yellow}${line.column}${ansi.normal}}} → ${function.name-without-args}\n"
