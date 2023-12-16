@@ -271,7 +271,7 @@ function fish_prompt
 
   # Use 'light' or 'dark' mode settings based on the current time.
   set -l hour (command date "+%H")
-  if test $hour -ge 7; and test $hour -lt 19
+  if test $hour -ge 7; and test $hour -lt 17
     light_mode
   else
     dark_mode
