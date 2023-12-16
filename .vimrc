@@ -227,7 +227,7 @@ if exists("&undodir")
   set undodir=~/.vim/undo
 endif
 " ---- Window Size Setup ----
-set winwidth=84      " Set a normal width of 84 columns...
+set winwidth=85      " Set a normal width of 85 columns...
 set winminwidth=15   " ...with a minimum of 15 columns.
 set winheight=5      " We have to have a winheight bigger than we want to set
 set winminheight=5   " winminheight. But if we set winheight to be huge before
