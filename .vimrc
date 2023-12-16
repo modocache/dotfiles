@@ -334,19 +334,14 @@ let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
 " FIXME: ctrlp makes a cache at `$USER/.cache/ctrlp`, change this via a user
 " setting.
 let g:ctrlp_match_func = {'match' : 'pymatcher#PyMatch' }
-" Normally use a VCS to list files -- except when in an llvm-project directory
-" (which normally contains a directory 'mlir'), which may contain nested Git
-" respositories which I would also like included in searches. For that case, use
-" 'find' to list the files in each of the nested repositories, but exclude the
-" '.git' and 'build' directories.
-" FIXME: Update this comment.
+" When listing files to match with ctrlp, use Git or Mercurial. When using Git,
+" we recursively search all Git submodules as well.
 let g:ctrlp_user_command = {
   \ 'types': {
-    \ 1: ['third-party', 'find %s -type f -not -path "*.git/*" -not -path "*build/*" -not -path "*.derived/*"'],
-    \ 2: ['.git', 'cd %s && git ls-files'],
-    \ 3: ['.hg', 'hg --cwd %s locate -I .'],
+    \ 1: ['.git', 'git -C %s ls-files --recurse-submodules'],
+    \ 2: ['.hg', 'hg --cwd %s locate -I .'],
     \ },
-  \ 'fallback': 'find %s -type f -not -path "*.git/*" -not -path "*build/*" -not -path "*.derived/*"'
+  \ 'fallback': 'find %s -type f -not -path "*.git/*"'
   \ }
 " Don't change anything about the working path, regardless of which file we
 " open in the buffer.
