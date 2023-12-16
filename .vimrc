@@ -295,7 +295,14 @@ Plugin 'modocache/llvm-project', {'name': 'mlir', 'rtp': 'mlir/utils/vim'}
 call vundle#end()  " Finish defining plugins.
 filetype plugin indent on  " Required for Vundle.
 
-" ---- Valloric/YouCompleteMe Setup ----
+" Valloric/YouCompleteMe
+" ----------------------
+"
+" - YouCompleteMe will automatically compile and produce diagnostics for source
+"   files opened in Vim. Placing the cursor on a line that has a diagnostic will
+"   display the diagnostic in the Vim status bar. You can use <leader>d on a
+"   line with a diagnostic in order to expand the Vim status bar to display the
+"   entire diagnostic message.
 let g:ycm_use_clangd = 0  " Use libclang, not clangd. As I mention above,
                           " the clangd completer is slow.
 let g:ycm_autoclose_preview_window_after_completion = 1  " Auto-close the
