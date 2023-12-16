@@ -164,22 +164,6 @@ syntax enable
 set cursorline
 " - Highlight the column with the cursor.
 set cursorcolumn
-" - Disable cursor line and column highlighting when the cursor leaves a
-"   window, and re-enable it when the cursor enters a window.
-"   - This is possible using Vim's `autocmd`, which allows users to specify
-"     commands to be executed when certain "autocommand events" occur.
-"     The syntax is `autocmd {event} {file-pattern} {command}`.
-"   - `autocmd` can be grouped, using the `augroup` command. Groups of
-"     `autocmd` can be conveniently executed or removed.
-"   - `autocmd!` deletes all previously defined autocommands in the current
-"     group. When a `.vimrc` is sourced twice, each autocommand adds to a list
-"     of commands, regardless of whether they're already present. So it's a
-"     good idea to clear them out.
-augroup cursor_active_window_only
-  autocmd!
-  autocmd WinLeave * set nocursorline nocursorcolumn
-  autocmd WinEnter * set cursorline cursorcolumn
-augroup end
 " - Display guiding columns in each window, just after the specified
 "   `textwidth`.
 set colorcolumn=+1
