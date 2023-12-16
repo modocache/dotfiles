@@ -90,6 +90,12 @@
 " it will be split vertically instead. So, `vertical help` opens the Vim
 " reference manual in a vertical split instead.
 "
+" (By the way, speaking of split windows: use `help wincmd` to learn more about
+" how to move windows around. For example, `Ctrl-w x` swaps the current window
+" with the next one. So, if you opened `vertical help wincmd` and found the help
+" window to the left of your current one, you can swap their positions with
+" `Ctrl-w x`. Alternatively, you could have run `vert rightbelow help wincmd`.)
+"
 " My preferred options are as follows:
 " - Normally Vim doesn't respond to mouse events. This option enables the use
 "   of the mouse in all of Vim's various "modes" (nomal, visual, insert,
