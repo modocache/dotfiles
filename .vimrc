@@ -329,13 +329,33 @@ let g:ycm_enable_diagnostic_signs = 0 " Don't put any symbols into the Vim
 let NERDTreeShowHidden = 1    " Show hidden files
 let NERDTreeIgnore=['\.py[co]$', '^__pycache__$', '\.DS_Store', '\.swp$']
 
-" ---- ctrlpvim/ctrlp.vim.git Setup ----
-" Use a reasonable matcher function.
-" FIXME: ctrlp makes a cache at `$USER/.cache/ctrlp`, change this via a user
-" setting.
+" ctrlpvim/ctrlp.vim.git & FelikZ/ctrlp-py-matcher
+" --------------------------------------------------
+"
+" CtrlP is a fuzzy file finder that can be activated using `<C-p>`. It brings up
+" a small window and, as I type, presents files that I can open using `<Enter>`.
+" (ctrlp-py-matcher is a file matcher function that can be plugged into CtrlP.)
+"
+" - Alternatively, `<C-v>` opens the file under the cursor in a vertical split,
+"   and `<C-t>` opens it in a new tab.
+" - Type `:25` after the file name in order to jump to line 25 once it's opened.
+" - CtrlP utilizes a cache of the files it has found. It can be refreshed via
+"   the `:CtrlPClearCache` command, or by pressing `<F5>` within the CtrlP
+"   finder window. (Note that on some Apple keyboards, you may need to hold down
+"   the `Fn` key while pressing `F5` in order to actually send `<F5>`.)
+" - The built-in CtrlP matching algorithm exhibits behavior I don't relish. For
+"   example, searching for "executionengine.cpp" inside of the llvm/llvm-project
+"   repository does not display "llvm/lib/ExecutionEngine/ExecutionEngine.cpp"
+"   or "mlir/lib/ExecutionEngine/ExecutionEngine.cpp" within the top 5 results,
+"   which simply seems incorrect to me. So, instead, we use the matcher function
+"   provided by the FelikZ/ctrlp-py-matcher project, which provides results more
+"   in line with my expectations.
 let g:ctrlp_match_func = {'match' : 'pymatcher#PyMatch' }
-" When listing files to match with ctrlp, use Git or Mercurial. When using Git,
-" we recursively search all Git submodules as well.
+" - CtrlP allows for a custom command to be used to determine the list of all
+"   files in the project, so I use version control systems where possible: `git`
+"   within Git repositories (with recursion into any submodules, since many
+"   projects I work on include LLVM and other projects as submodules), and `hg`
+"   within Mercirual repositories. Otherwise, fall back to the `find` command.
 let g:ctrlp_user_command = {
   \ 'types': {
     \ 1: ['.git', 'git -C %s ls-files --recurse-submodules'],
@@ -343,14 +363,27 @@ let g:ctrlp_user_command = {
     \ },
   \ 'fallback': 'find %s -type f -not -path "*.git/*"'
   \ }
-" Don't change anything about the working path, regardless of which file we
-" open in the buffer.
+" - CtrlP sets its local working directory based on a complex series of rules
+"   (such as recursively searching parent directories for a `.git` directory,
+"   etc.), and I find these confusing and not worth learning about. So, I
+"   disable this behavior.
 let g:ctrlp_working_path_mode = ''
-let g:ctrlp_extensions = ['line']
-" Display the window at the bottom (default), order it bottom-to-top
-" (default), with a minimum height of 1, maximum of 5, and displaying 5
-" results.
-let g:ctrlp_match_window = 'bottom,order:btt,min:1,max:5,results:5'
+" - By default, CtrlP places its cache at `$HOME/.cache/ctrlp`. However, I
+"   prefer to keep my `$HOME` directory uncluttered, and so I nest the cache
+"   within the `$HOME/.vim` directory.
+let g:ctrlp_cache_dir = $HOME.'/.vim/cache/ctrlp'
+" - By default, CtrlP clears its cache when Vim exits. However, rebuilding the
+"   cache can take a few seconds for large projects such as llvm/llvm-project,
+"   which slows me down when I want to jump into coding. So, I disable automatic
+"   cache clearing on exit, and instead rely on manually rebuilding the cache
+"   (via the `:CtrlPClearCache` command, or `<F5>` within a CtrlP window) to
+"   pick up new files and to exclude old ones that no longer exist.
+let g:ctrlp_clear_cache_on_exit = 0
+" - CtrlP allows for a great deal of customization of how its finder window is
+"   displayed:
+"   - `max`: The maximum height of the window. This is `10`, but I prefer
+"            something more compact.
+let g:ctrlp_match_window = 'max:5'
 
 " ---- tpope/vim-fugitive Setup ----
 autocmd QuickFixCmdPost *grep* cwindow
