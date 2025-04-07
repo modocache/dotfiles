@@ -294,7 +294,7 @@ function fish_prompt
   type -q svn; and prompt_svn
 
   set_color $fish_color_param
-  echo " > "
+  echo -n " > "
 end
 
 
